@@ -63,8 +63,9 @@ Q8_0; decision-sensitive controls remain at their locked higher precision.
 | Native context metadata | 262,144 tokens |
 | Official implementation oracle | `MotifTechnologies/vllm@4cd9eb4129883565e69d508038d783d59ee01867` |
 | Conversion base | `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d` |
-| Runtime base | [`Baekpica/ds4`](https://github.com/Baekpica/ds4) |
-| H200 reproduction state | Preserved in the private `Baekpica/motif-3-spark-handoff` bucket |
+| Native runtime | [`Baekpica/ds4:feature/motif-3-model-loader@0a360dbe`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader) |
+| Public reproduction | [`Baekpica/motif-3-mixed-ds4`](https://github.com/Baekpica/motif-3-mixed-ds4) |
+| Private Spark handoff | Expensive state is preserved in `hf://buckets/Baekpica/motif-3-spark-handoff` |
 
 Only the official final Motif-3 checkpoint above was used. Motif-3-Beta was
 not used as a source, calibration input, implementation oracle, or fallback.
@@ -106,11 +107,11 @@ GDLA/differential heads and output gate, modified mHC, interleaved SWA/full
 attention with YaRN, latent KV semantics, and MTP. Do not assume that a stock
 GGUF runtime recognizes `motif3` merely because it can parse the container.
 
-The H200 development branch is named `feature/motif-3-model-loader` on the
-[`Baekpica/ds4`](https://github.com/Baekpica/ds4) base. Its exact current
-uncommitted state is preserved as a patch plus complete touched sources in the
-private Spark handoff; this Q8 artifact does not claim that a public remote
-feature branch has been released.
+The H200 development branch is publicly available as
+[`Baekpica/ds4:feature/motif-3-model-loader`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader)
+at exact implementation commit
+`0a360dbe46dd50d26e170300adf18993ac3ab1a0`. The private Spark handoff also
+preserves an offline source snapshot and commit metadata.
 
 ## Intended use in the mixed-quant pipeline
 

@@ -39,6 +39,8 @@ target-host measurements.
 - Official training example: `f2cad4115bde073bc61dead4dce8db9711db0ab6`
 - llama.cpp conversion base: `1d2869c6e54d5003f3927a79efbca0fefa034a6d`
 - Baekpica/ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
+- Baekpica/ds4 Motif implementation:
+  `feature/motif-3-model-loader@0a360dbe46dd50d26e170300adf18993ac3ab1a0`
 - Mixed-weight revision: `efd6044e25e7f8e3b459a737d021091e2e69b6c6`
 - Q8 reference revision: `5c266c95bf8c8d822d50e5e1cce9d108eaadb2af`
 
@@ -56,8 +58,9 @@ input, or fallback.
   tokenizer, and chat fixtures
 - `fixtures/long-context/`: exact deterministic 32K/64K/128K/256K inputs
   published with the final H200 bundle
-- `ds4/`: base SHA, tracked patch, and complete touched native-runtime sources
-  published with the final H200 bundle
+- Native runtime: public
+  [`Baekpica/ds4:feature/motif-3-model-loader`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader)
+  at the pinned implementation commit above
 - `reports/`: artifact, H200 validation, and DGX Spark handoff records
 - `publish/`: public Q8 and mixed model cards plus verification manifests
 
@@ -97,8 +100,10 @@ and `scripts/`. They require the pinned source snapshot, llama.cpp conversion
 base, and ds4 quantizer recorded above. The private handoff supplies the exact
 expensive calibration outputs so Spark work must not requantize the model.
 
-For the native runtime, apply `ds4/tracked.patch` to the pinned ds4 base or
-overlay `ds4/source/`, then build H200 with the recorded `sm_90` configuration.
+For the native runtime, check out the pinned public ds4 implementation commit.
+The private handoff additionally preserves `ds4/HEAD`, status, patch metadata,
+and complete Motif-touched sources as an offline audit snapshot. Build H200
+with the recorded `sm_90` configuration.
 On DGX Spark, rebuild from clean objects with `make cuda-spark` and confirm the
 log emits `compute_121a`/`sm_121a`; do not reuse H200 binaries.
 

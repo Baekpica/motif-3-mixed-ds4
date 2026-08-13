@@ -8,10 +8,14 @@
   public repository's `MQ87-88-FIT-SHA256SUMS`
 - Expensive development state:
   `hf://buckets/Baekpica/motif-3-spark-handoff`
-- Reproduction location: `reproduction/` and `ds4/` inside that private
-  bucket; no separate HF model repository is used for private handoff data
+- Public reproduction repository:
+  `https://github.com/Baekpica/motif-3-mixed-ds4`
+- The private bucket additionally freezes `reproduction/` and `ds4/` offline
+  snapshots; no separate HF model repository is used for private handoff data
 - ds4 branch: `feature/motif-3-model-loader`
 - ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
+- ds4 Motif implementation commit:
+  `0a360dbe46dd50d26e170300adf18993ac3ab1a0`
 - Source model revision:
   `Motif-Technologies/Motif-3@ccceb1a5fd7b5eb32e47841216b3caf5666c07bc`
 

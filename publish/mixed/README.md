@@ -154,8 +154,9 @@ rank-local accumulators are preserved in the private Spark handoff.
 | Official implementation oracle | `MotifTechnologies/vllm@4cd9eb4129883565e69d508038d783d59ee01867` |
 | Conversion base | `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d` |
 | ds4 base | `Baekpica/ds4@b0309611041655f4e45671cfd9c9886aff161406` |
-| H200 development branch | `feature/motif-3-model-loader` (exact uncommitted state preserved in the private Spark handoff) |
-| Reproduction state | Calibration inputs, manifests, scripts, reports, ds4 patch, and complete touched sources are preserved in `Baekpica/motif-3-spark-handoff` |
+| Native ds4 implementation | `Baekpica/ds4:feature/motif-3-model-loader@0a360dbe46dd50d26e170300adf18993ac3ab1a0` |
+| Public reproduction | [`Baekpica/motif-3-mixed-ds4`](https://github.com/Baekpica/motif-3-mixed-ds4) |
+| Private Spark handoff | Expensive calibration state plus offline reproduction/runtime snapshots are preserved in `hf://buckets/Baekpica/motif-3-spark-handoff` |
 
 Only the official final Motif-3 checkpoint was used. Motif-3-Beta was not used
 as a source, calibration input, implementation oracle, or fallback.
@@ -188,9 +189,9 @@ gate, interleaved SWA/full attention, YaRN, latent KV semantics, and MTP.
 
 The target runtime is
 [`Baekpica/ds4`](https://github.com/Baekpica/ds4) on the H200 development
-branch named `feature/motif-3-model-loader`. The exact current branch state is
-carried as a patch plus complete touched source files in the private Spark
-handoff; no public remote branch is claimed by this artifact release.
+branch named `feature/motif-3-model-loader`, pinned above to its exact public
+implementation commit. The private Spark handoff also carries an offline
+source snapshot and commit metadata.
 Stock GGUF runtimes should not be assumed to execute this architecture merely
 because they can parse the container.
 

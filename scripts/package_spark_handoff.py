@@ -47,6 +47,10 @@ def parse_args() -> argparse.Namespace:
         default=Path("/motif3/handoff-fixtures/long-context"),
     )
     parser.add_argument("--ds4", type=Path, default=Path("/workspace/ds4"))
+    parser.add_argument(
+        "--ds4-base",
+        default="b0309611041655f4e45671cfd9c9886aff161406",
+    )
     return parser.parse_args()
 
 
@@ -97,6 +101,7 @@ def main() -> int:
     for option, revision in (
         ("--model-revision", args.model_revision),
         ("--q8-revision", args.q8_revision),
+        ("--ds4-base", args.ds4_base),
     ):
         if len(revision) != 40 or any(
             char not in "0123456789abcdef" for char in revision
@@ -122,8 +127,24 @@ def main() -> int:
     # top-level directories below; this tree contains the code needed to
     # rebuild inventories, fixtures, Q8/imatrix state, and quantized outputs.
     reproduction = args.out / "reproduction"
-    for relative in (".gitignore", "README.md", "WORKPLAN.md", "pyproject.toml"):
+    for relative in (
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "WORKPLAN.md",
+        "pyproject.toml",
+        "uv.lock",
+    ):
         copy_file(ROOT / relative, reproduction / relative)
+    (reproduction / "GIT-HEAD.txt").write_text(
+        git_output(ROOT, "rev-parse", "HEAD"), encoding="utf-8"
+    )
+    (reproduction / "branch.txt").write_text(
+        git_output(ROOT, "branch", "--show-current"), encoding="utf-8"
+    )
+    (reproduction / "origin.txt").write_text(
+        git_output(ROOT, "remote", "get-url", "origin"), encoding="utf-8"
+    )
     copy_source_tree(ROOT / "converter", reproduction / "converter")
     for directory, patterns in (
         ("calibration", ("*.py",)),
@@ -156,8 +177,9 @@ def main() -> int:
     copy_tree(args.long_context, args.out / "fixtures/long-context")
     copy_tree(ROOT / "manifests", args.out / "manifests/source")
 
-    # Preserve the exact uncommitted ds4 development state as both a tracked
-    # patch and complete copies of every Motif-touched source/test file.
+    # Preserve the exact committed ds4 development state as both a patch from
+    # the pinned base and complete copies of every Motif-touched source/test
+    # file. The public branch is canonical; this is an offline audit snapshot.
     ds4_dir = args.out / "ds4"
     ds4_dir.mkdir(parents=True, exist_ok=True)
     (ds4_dir / "HEAD.txt").write_text(
@@ -166,11 +188,17 @@ def main() -> int:
     (ds4_dir / "branch.txt").write_text(
         git_output(args.ds4, "branch", "--show-current"), encoding="utf-8"
     )
+    (ds4_dir / "base.txt").write_text(args.ds4_base + "\n", encoding="utf-8")
+    (ds4_dir / "origin.txt").write_text(
+        git_output(args.ds4, "remote", "get-url", "origin"), encoding="utf-8"
+    )
     (ds4_dir / "status.txt").write_text(
-        git_output(args.ds4, "status", "--short"), encoding="utf-8"
+        git_output(args.ds4, "status", "--short", "--untracked-files=no"),
+        encoding="utf-8",
     )
     (ds4_dir / "tracked.patch").write_text(
-        git_output(args.ds4, "diff", "--binary", "HEAD"), encoding="utf-8"
+        git_output(args.ds4, "diff", "--binary", args.ds4_base, "HEAD"),
+        encoding="utf-8",
     )
     touched = (
         "Makefile",

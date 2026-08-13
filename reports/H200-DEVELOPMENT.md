@@ -15,6 +15,10 @@ claim of single-DGX-Spark serving.
 - llama.cpp conversion base:
   `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d`
 - ds4 base: `Baekpica/ds4@b0309611041655f4e45671cfd9c9886aff161406`
+- ds4 Motif implementation:
+  `Baekpica/ds4@0a360dbe46dd50d26e170300adf18993ac3ab1a0`
+- Public reproduction:
+  `https://github.com/Baekpica/motif-3-mixed-ds4`
 
 Motif-3-Beta was not downloaded or used as a source, oracle, fixture input,
 or fallback.

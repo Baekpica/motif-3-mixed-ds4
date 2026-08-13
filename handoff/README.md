@@ -3,10 +3,13 @@
 This private bucket preserves the expensive four-H200 development state for
 the full-topology Motif-3 MQ87-88-FIT artifact.
 
-There is intentionally no separate Hugging Face model repository for the
-reproduction tree. Public Hub model repositories are limited to the Q8_0 and
-MQ87-88 GGUF artifacts; private code, calibration state, fixtures, and ds4
-handoff material live in this bucket.
+There is intentionally no separate Hugging Face *model* repository for the
+reproduction tree. The public reproduction repository is
+`https://github.com/Baekpica/motif-3-mixed-ds4`, while the native runtime is
+`https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader`. Public Hub
+model repositories are limited to the Q8_0 and MQ87-88 GGUF artifacts;
+expensive calibration state and offline Spark handoff material live in this
+private bucket.
 
 - Public model: `Baekpica/Motif-3-Mixed-Quant-GGUF`
 - Exact public revision: `model/revision.txt`
@@ -16,7 +19,8 @@ handoff material live in this bucket.
 - Rank-local imatrix accumulators: `calibration/partials/`
 - Official-final numerical fixtures: `fixtures/official-final/`
 - Exact 32K/64K/128K/256K inputs: `fixtures/long-context/`
-- ds4 base, patch, and complete Motif-touched sources: `ds4/`
+- ds4 commit metadata, patch audit, and complete Motif-touched source snapshot:
+  `ds4/`
 - Converter, calibration, fixture, verification, quantization, split, and
   upload sources with tests: `reproduction/`
 - H200 evidence and Spark gates: `reports/`
