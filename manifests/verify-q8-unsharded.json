@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "file_bytes": 334810733184,
+  "file_gib": 311.8167940378189,
+  "files": [
+    "/motif3/artifacts/Motif-3-Q8_0.gguf"
+  ],
+  "shard_count": 1,
+  "source_model": "Motif-Technologies/Motif-3",
+  "source_revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+  "status": "ok",
+  "tensor_bytes": 334801074712,
+  "tensor_count": 2287,
+  "type_tensor_counts": {
+    "BF16": 318,
+    "F32": 1273,
+    "Q8_0": 696
+  },
+  "variant": "q8-reference"
+}

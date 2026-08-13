@@ -1,0 +1,949 @@
+{
+  "status": "ok",
+  "source_model": "Motif-Technologies/Motif-3",
+  "source_revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+  "gguf": "/motif3/artifacts/Motif-3-MQ87-FIT.gguf",
+  "sample_count": 57,
+  "samples": [
+    {
+      "tensor": "token_embd.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.00018674450347218728,
+      "actual_rms": 0.00018678366576871486,
+      "rmse": 1.344796346846577e-06,
+      "relative_rmse": 0.007201263340245319,
+      "cosine": 0.9999740123748779,
+      "max_abs": 4.947185516357422e-06,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "token_embd.weight",
+      "prefix": [
+        12345
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.02951657176744764,
+      "actual_rms": 0.02951927877202853,
+      "rmse": 0.00015771726905359834,
+      "relative_rmse": 0.005343346452840329,
+      "cosine": 0.9999857544898987,
+      "max_abs": 0.00043773651123046875,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "token_embd.weight",
+      "prefix": [
+        220159
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.03148364443955599,
+      "actual_rms": 0.031486321385359124,
+      "rmse": 0.00016766861874471423,
+      "relative_rmse": 0.005325578462385877,
+      "cosine": 0.999985933303833,
+      "max_abs": 0.000461578369140625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "output.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.027632501134147378,
+      "actual_rms": 0.027630156925352672,
+      "rmse": 0.00015054950934951898,
+      "relative_rmse": 0.005448276600755283,
+      "cosine": 0.9999851584434509,
+      "max_abs": 0.00041294097900390625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "output.weight",
+      "prefix": [
+        12345
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.04606739213896064,
+      "actual_rms": 0.04606955523233037,
+      "rmse": 0.0002423105213004472,
+      "relative_rmse": 0.005259914009664931,
+      "cosine": 0.9999861717224121,
+      "max_abs": 0.0006389617919921875,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "output.weight",
+      "prefix": [
+        220159
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.0286056510743836,
+      "actual_rms": 0.02860854596564918,
+      "rmse": 0.00015336027527253064,
+      "relative_rmse": 0.0053611880699287765,
+      "cosine": 0.9999855756759644,
+      "max_abs": 0.00048828125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.0.attn_q_a.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.02300794076249149,
+      "actual_rms": 0.023009376989890893,
+      "rmse": 0.00012059711436681212,
+      "relative_rmse": 0.005241543152936771,
+      "cosine": 0.9999862313270569,
+      "max_abs": 0.0003342628479003906,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.0.attn_q_a.weight",
+      "prefix": [
+        511
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.01936402488499073,
+      "actual_rms": 0.01936352635090829,
+      "rmse": 0.00010468325362055778,
+      "relative_rmse": 0.005406068947045143,
+      "cosine": 0.9999854564666748,
+      "max_abs": 0.0002918243408203125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.0.attn_q_a.weight",
+      "prefix": [
+        1023
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.019656028487519815,
+      "actual_rms": 0.0196586261999784,
+      "rmse": 0.00010478324928664917,
+      "relative_rmse": 0.0053308454122957295,
+      "cosine": 0.9999857544898987,
+      "max_abs": 0.00030517578125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.1.ffn_gate.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.032726405515143504,
+      "actual_rms": 0.03272447701515597,
+      "rmse": 0.00017355419363094128,
+      "relative_rmse": 0.005303185329981701,
+      "cosine": 0.9999859929084778,
+      "max_abs": 0.00048828125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.1.ffn_gate.weight",
+      "prefix": [
+        6143
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.035869132013714944,
+      "actual_rms": 0.03586821037491973,
+      "rmse": 0.00019189349907859844,
+      "relative_rmse": 0.005349822766974844,
+      "cosine": 0.9999858736991882,
+      "max_abs": 0.0005922317504882812,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.1.ffn_gate.weight",
+      "prefix": [
+        12287
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.0322896923360983,
+      "actual_rms": 0.032289231256291,
+      "rmse": 0.00017159510924011516,
+      "relative_rmse": 0.005314237975822402,
+      "cosine": 0.999985933303833,
+      "max_abs": 0.00048065185546875,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.mhc_attn.proj_pre.weight",
+      "prefix": [
+        0
+      ],
+      "type": "BF16",
+      "elements": 16384,
+      "reference_rms": 0.03520855791244703,
+      "actual_rms": 0.03520855791244703,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0000001192092896,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.mhc_attn.proj_pre.weight",
+      "prefix": [
+        1
+      ],
+      "type": "BF16",
+      "elements": 16384,
+      "reference_rms": 0.05739358058838267,
+      "actual_rms": 0.05739358058838267,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.mhc_attn.proj_pre.weight",
+      "prefix": [
+        3
+      ],
+      "type": "BF16",
+      "elements": 16384,
+      "reference_rms": 0.03147771434818792,
+      "actual_rms": 0.03147771434818792,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0000001192092896,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_inp.weight",
+      "prefix": [
+        0
+      ],
+      "type": "F32",
+      "elements": 4096,
+      "reference_rms": 0.05070282476545178,
+      "actual_rms": 0.05070282476545178,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0000001192092896,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_inp.weight",
+      "prefix": [
+        191
+      ],
+      "type": "F32",
+      "elements": 4096,
+      "reference_rms": 0.05538568173189653,
+      "actual_rms": 0.05538568173189653,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_inp.weight",
+      "prefix": [
+        383
+      ],
+      "type": "F32",
+      "elements": 4096,
+      "reference_rms": 0.047852772350155684,
+      "actual_rms": 0.047852772350155684,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 0.9999998807907104,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_polynorm_exps.weight",
+      "prefix": [
+        0
+      ],
+      "type": "F32",
+      "elements": 3,
+      "reference_rms": 0.3379480757777858,
+      "actual_rms": 0.3379480757777858,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 0.9999999403953552,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_polynorm_exps.weight",
+      "prefix": [
+        173
+      ],
+      "type": "F32",
+      "elements": 3,
+      "reference_rms": 0.7689799804727289,
+      "actual_rms": 0.7689799804727289,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_polynorm_exps.weight",
+      "prefix": [
+        383
+      ],
+      "type": "F32",
+      "elements": 3,
+      "reference_rms": 0.3511293639412858,
+      "actual_rms": 0.3511293639412858,
+      "rmse": 0.0,
+      "relative_rmse": 0.0,
+      "cosine": 1.0,
+      "max_abs": 0.0,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_shexp.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.027594728575466354,
+      "actual_rms": 0.02759494266163564,
+      "rmse": 0.000151094583406654,
+      "relative_rmse": 0.005475487211024342,
+      "cosine": 0.9999850392341614,
+      "max_abs": 0.000431060791015625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_shexp.weight",
+      "prefix": [
+        639
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.05475560568016764,
+      "actual_rms": 0.05475493640810258,
+      "rmse": 0.00029380319181464265,
+      "relative_rmse": 0.005365718964570919,
+      "cosine": 0.9999855756759644,
+      "max_abs": 0.000774383544921875,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_shexp.weight",
+      "prefix": [
+        1279
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.026988755135910345,
+      "actual_rms": 0.02699115113853432,
+      "rmse": 0.0001447045171206727,
+      "relative_rmse": 0.005361659564954652,
+      "cosine": 0.9999857544898987,
+      "max_abs": 0.00039768218994140625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_exps.weight",
+      "prefix": [
+        0,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03464500391672497,
+      "actual_rms": 0.035855699416255354,
+      "rmse": 0.011912858687853939,
+      "relative_rmse": 0.3438550249983656,
+      "cosine": 0.9434680938720703,
+      "max_abs": 0.053769588470458984,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_exps.weight",
+      "prefix": [
+        173,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.036091132943366765,
+      "actual_rms": 0.03733995480852053,
+      "rmse": 0.01255724495961198,
+      "relative_rmse": 0.34793158140301306,
+      "cosine": 0.9420747756958008,
+      "max_abs": 0.045919835567474365,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_gate_exps.weight",
+      "prefix": [
+        383,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03666984441177153,
+      "actual_rms": 0.038014945854744873,
+      "rmse": 0.012809753099594614,
+      "relative_rmse": 0.3493266280530633,
+      "cosine": 0.9417932033538818,
+      "max_abs": 0.049439430236816406,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_up_exps.weight",
+      "prefix": [
+        0,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03528059185259768,
+      "actual_rms": 0.03676971292652016,
+      "rmse": 0.01223471504978487,
+      "relative_rmse": 0.3467831577458086,
+      "cosine": 0.9431606531143188,
+      "max_abs": 0.059388160705566406,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_up_exps.weight",
+      "prefix": [
+        173,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.036561867199756994,
+      "actual_rms": 0.03797617219118955,
+      "rmse": 0.012546222036648931,
+      "relative_rmse": 0.34315047336346977,
+      "cosine": 0.9440368413925171,
+      "max_abs": 0.051030755043029785,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_up_exps.weight",
+      "prefix": [
+        383,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03661888348702348,
+      "actual_rms": 0.03788270855550927,
+      "rmse": 0.01235402930259233,
+      "relative_rmse": 0.33736772195608283,
+      "cosine": 0.9455658793449402,
+      "max_abs": 0.04141640663146973,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_down_exps.weight",
+      "prefix": [
+        0,
+        0
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03557324893322653,
+      "actual_rms": 0.03553186626380172,
+      "rmse": 0.010000315249934727,
+      "relative_rmse": 0.28111897422431154,
+      "cosine": 0.9604406356811523,
+      "max_abs": 0.03772735595703125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_down_exps.weight",
+      "prefix": [
+        173,
+        2047
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03494629775795011,
+      "actual_rms": 0.03468936226945669,
+      "rmse": 0.009874744459010883,
+      "relative_rmse": 0.2825691158304295,
+      "cosine": 0.9598089456558228,
+      "max_abs": 0.03275489807128906,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.2.ffn_down_exps.weight",
+      "prefix": [
+        383,
+        4095
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03585768685490932,
+      "actual_rms": 0.03537780538020212,
+      "rmse": 0.009419313827236628,
+      "relative_rmse": 0.2626860417781528,
+      "cosine": 0.9651207327842712,
+      "max_abs": 0.03194427490234375,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_gate_exps.weight",
+      "prefix": [
+        0,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.037376825232304164,
+      "actual_rms": 0.03867366746004875,
+      "rmse": 0.012963641320439374,
+      "relative_rmse": 0.34683634149952136,
+      "cosine": 0.942451000213623,
+      "max_abs": 0.050297677516937256,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_gate_exps.weight",
+      "prefix": [
+        173,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03366760738348695,
+      "actual_rms": 0.03486754541257074,
+      "rmse": 0.011659894580634165,
+      "relative_rmse": 0.3463238253857334,
+      "cosine": 0.9427071213722229,
+      "max_abs": 0.04800146818161011,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_gate_exps.weight",
+      "prefix": [
+        383,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.036582530796030126,
+      "actual_rms": 0.03786759905442656,
+      "rmse": 0.01264425960542829,
+      "relative_rmse": 0.3456365464687977,
+      "cosine": 0.9428908824920654,
+      "max_abs": 0.06412345170974731,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_up_exps.weight",
+      "prefix": [
+        0,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03706375269148631,
+      "actual_rms": 0.0383771060135136,
+      "rmse": 0.012715270522846723,
+      "relative_rmse": 0.3430648436677992,
+      "cosine": 0.9437737464904785,
+      "max_abs": 0.051979780197143555,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_up_exps.weight",
+      "prefix": [
+        173,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.0343739317524774,
+      "actual_rms": 0.03552576571244599,
+      "rmse": 0.011689806023800488,
+      "relative_rmse": 0.3400776526810314,
+      "cosine": 0.944591760635376,
+      "max_abs": 0.04609203338623047,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_up_exps.weight",
+      "prefix": [
+        383,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03604555302803698,
+      "actual_rms": 0.037446135279072035,
+      "rmse": 0.012443421389339607,
+      "relative_rmse": 0.34521377379508794,
+      "cosine": 0.9433691501617432,
+      "max_abs": 0.05088520050048828,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_down_exps.weight",
+      "prefix": [
+        0,
+        4095
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03520202934293861,
+      "actual_rms": 0.03472204745433299,
+      "rmse": 0.009761567157949671,
+      "relative_rmse": 0.2773012618918177,
+      "cosine": 0.9611148834228516,
+      "max_abs": 0.03269195556640625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_down_exps.weight",
+      "prefix": [
+        173,
+        0
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03476402951926834,
+      "actual_rms": 0.03426870445778023,
+      "rmse": 0.009854054049902798,
+      "relative_rmse": 0.283455462044211,
+      "cosine": 0.9593487977981567,
+      "max_abs": 0.039825439453125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.26.ffn_down_exps.weight",
+      "prefix": [
+        383,
+        2047
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03707234542460301,
+      "actual_rms": 0.03681723826565914,
+      "rmse": 0.009916208267801018,
+      "relative_rmse": 0.26748262496551245,
+      "cosine": 0.9640024900436401,
+      "max_abs": 0.02851104736328125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_gate_exps.weight",
+      "prefix": [
+        0,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03565642486316714,
+      "actual_rms": 0.03663445360758318,
+      "rmse": 0.01226340984932915,
+      "relative_rmse": 0.34393268243774977,
+      "cosine": 0.9428003430366516,
+      "max_abs": 0.054204344749450684,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_gate_exps.weight",
+      "prefix": [
+        173,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03351001877642548,
+      "actual_rms": 0.034673793793111196,
+      "rmse": 0.01163442030354426,
+      "relative_rmse": 0.3471922943752318,
+      "cosine": 0.9423346519470215,
+      "max_abs": 0.0426177978515625,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_gate_exps.weight",
+      "prefix": [
+        383,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03490973420979067,
+      "actual_rms": 0.036137356100076415,
+      "rmse": 0.01195722904873344,
+      "relative_rmse": 0.34251847856750384,
+      "cosine": 0.9439306259155273,
+      "max_abs": 0.05387026071548462,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_up_exps.weight",
+      "prefix": [
+        0,
+        639
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03729690038613671,
+      "actual_rms": 0.03851026346990725,
+      "rmse": 0.012806915398265818,
+      "relative_rmse": 0.3433774728107476,
+      "cosine": 0.9434159994125366,
+      "max_abs": 0.04857218265533447,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_up_exps.weight",
+      "prefix": [
+        173,
+        1279
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.03427546199804014,
+      "actual_rms": 0.0357228785558472,
+      "rmse": 0.011946657394291668,
+      "relative_rmse": 0.34854839870502036,
+      "cosine": 0.9425739049911499,
+      "max_abs": 0.051048219203948975,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_up_exps.weight",
+      "prefix": [
+        383,
+        0
+      ],
+      "type": "IQ2_XXS",
+      "elements": 4096,
+      "reference_rms": 0.036256988857906,
+      "actual_rms": 0.03745716587332756,
+      "rmse": 0.012295452025572372,
+      "relative_rmse": 0.3391195025532655,
+      "cosine": 0.9448716640472412,
+      "max_abs": 0.06631678342819214,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_down_exps.weight",
+      "prefix": [
+        0,
+        2047
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03776252033481507,
+      "actual_rms": 0.037345597260675184,
+      "rmse": 0.010602170955708356,
+      "relative_rmse": 0.280759092923512,
+      "cosine": 0.9602088332176208,
+      "max_abs": 0.04437065124511719,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_down_exps.weight",
+      "prefix": [
+        173,
+        4095
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03664056389780987,
+      "actual_rms": 0.03560626789643454,
+      "rmse": 0.010513726105964847,
+      "relative_rmse": 0.2869422570920992,
+      "cosine": 0.9580461978912354,
+      "max_abs": 0.04217529296875,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "blk.52.ffn_down_exps.weight",
+      "prefix": [
+        383,
+        0
+      ],
+      "type": "Q2_K",
+      "elements": 1280,
+      "reference_rms": 0.03705767274001027,
+      "actual_rms": 0.03672562091942854,
+      "rmse": 0.01043455752896463,
+      "relative_rmse": 0.28157616918287187,
+      "cosine": 0.960039496421814,
+      "max_abs": 0.03418731689453125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.attn_q_a.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.04033184596081668,
+      "actual_rms": 0.04033411141545098,
+      "rmse": 0.00021475567005442274,
+      "relative_rmse": 0.005324717104767851,
+      "cosine": 0.9999858140945435,
+      "max_abs": 0.0005807876586914062,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.attn_q_a.weight",
+      "prefix": [
+        511
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.03151520431168361,
+      "actual_rms": 0.031516813732093744,
+      "rmse": 0.00017114045762441074,
+      "relative_rmse": 0.005430409269501831,
+      "cosine": 0.9999852180480957,
+      "max_abs": 0.0006437301635742188,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.attn_q_a.weight",
+      "prefix": [
+        1023
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.03464788350487792,
+      "actual_rms": 0.03464914189827983,
+      "rmse": 0.00019678545437185752,
+      "relative_rmse": 0.005679580813187419,
+      "cosine": 0.9999839067459106,
+      "max_abs": 0.00086212158203125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.ffn_gate.weight",
+      "prefix": [
+        0
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.03103434304219069,
+      "actual_rms": 0.031035592599081598,
+      "rmse": 0.00017024359918214183,
+      "relative_rmse": 0.005485651781018802,
+      "cosine": 0.9999850392341614,
+      "max_abs": 0.0004439353942871094,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.ffn_gate.weight",
+      "prefix": [
+        6143
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.02645437991033191,
+      "actual_rms": 0.02645221953564838,
+      "rmse": 0.00014374269109753297,
+      "relative_rmse": 0.005433606517512566,
+      "cosine": 0.9999852776527405,
+      "max_abs": 0.00048828125,
+      "finite": true,
+      "nonzero": true
+    },
+    {
+      "tensor": "mtp.0.ffn_gate.weight",
+      "prefix": [
+        12287
+      ],
+      "type": "Q8_0",
+      "elements": 4096,
+      "reference_rms": 0.03047388956791306,
+      "actual_rms": 0.0304749088533367,
+      "rmse": 0.00016391697839138346,
+      "relative_rmse": 0.005378931955045769,
+      "cosine": 0.9999855160713196,
+      "max_abs": 0.0004711151123046875,
+      "finite": true,
+      "nonzero": true
+    }
+  ],
+  "errors": []
+}

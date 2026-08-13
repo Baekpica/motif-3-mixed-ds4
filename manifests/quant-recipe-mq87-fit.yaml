@@ -1,0 +1,44 @@
+recipe:
+  name: motif-3-mq87-88-fit
+  source_model: Motif-Technologies/Motif-3
+  source_revision: ccceb1a5fd7b5eb32e47841216b3caf5666c07bc
+  artifact_class: MQ87-88-FIT
+  nominal_payload_gib: [87, 88]
+  size_gate: measured_spark_residency
+  no_size_reduction_ladder: true
+
+rules:
+  embedding: Q8_0
+  lm_head: Q8_0
+  gdla_projection: Q8_0
+  dense_mlp: Q8_0
+  shared_expert: Q8_0
+  mtp_projection: Q8_0
+  router: F32
+  router_control: F32
+  rms_norm: F32
+  polynorm_coefficients_and_bias: F32
+  mhc_control_and_scalar: F32
+  mhc_small_projection: BF16
+  routed_expert_gate_up: IQ2_XXS
+  routed_expert_down: Q2_K
+
+requirements:
+  imatrix_for: [routed_expert_gate_up]
+  preserve_all_layers: true
+  preserve_all_experts: true
+  preserve_shared_expert: true
+  preserve_mtp: true
+  pruning: false
+  expert_dropping: false
+  expert_merging: false
+  layer_dropping: false
+  cpu_weight_offload_at_serving: false
+  ssd_streaming_at_serving: false
+
+spark_preferred_budget_gib:
+  aligned_repacked_model_max: 98
+  latent_kv_256k_max: 5
+  steady_cuda_workspace_max: 6
+  server_session_max: 3
+  final_memavailable_min: 8

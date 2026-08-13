@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "output": "/workspace/motif-3-mixed-ds4/calibration/calibration.txt",
+  "output_sha256": "1a213224c444ed4cf39cdb36ecd41c71a5e6d8af568266f92c880d418d74f438",
+  "bytes": 17011959,
+  "documents": 1539,
+  "seed": 1234,
+  "requested_tokens": 4000000,
+  "actual_tokens": 4079555,
+  "source_model": {
+    "repo": "Motif-Technologies/Motif-3",
+    "revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc"
+  },
+  "reference_mix": {
+    "dataset": "Baekpica/Solar-Open2-120B-A15B-REAM-148E-Healing-Mix",
+    "revision": "1931f3a40cc3463217f9c7d25906f80ded029264",
+    "normalizer_sha256": "677274f0d6a93326aa3d76e99e0d251d499317fa455dfb7eefed8fbc93ad1b93",
+    "reuse": "bucket shares, source files, source revisions, record normalization"
+  },
+  "tokenizer": {
+    "class": "TokenizersBackend",
+    "vocab_size": 220160,
+    "tokenizer_json_sha256": "956d8a693e0ede5283c803aba3fe1d4b46b202d9faac007f947c6f5b61ce7864"
+  },
+  "rendering": {
+    "template": "official Motif-3 chat_template.jinja",
+    "template_sha256": "998a066fd57a07187040a896e7fc455b2aa21dd490d156e82b63518be0a49297",
+    "enable_thinking": true,
+    "tools": "preserved where present"
+  },
+  "buckets": [
+    {
+      "bucket": "if_chat",
+      "share": 0.22,
+      "repo": "nvidia/Nemotron-SFT-Instruction-Following-Chat-v2",
+      "revision": "1a9454ed054b8544503ab8d8c0a519d141a44c5b",
+      "files": [
+        "data/reasoning_on.jsonl",
+        "data/reasoning_off.jsonl"
+      ],
+      "target_tokens": 880000,
+      "tokens": 883429,
+      "chars": 3911555,
+      "documents": 570,
+      "coverage": 1.003896590909091,
+      "status": "ok"
+    },
+    {
+      "bucket": "cascade1_reasoning",
+      "share": 0.16,
+      "repo": "nvidia/Nemotron-Cascade-SFT-Stage-1",
+      "revision": "e59a356b107737562f064ec252e6adacbc737899",
+      "files": [
+        "general.jsonl",
+        "science.jsonl",
+        "math/math_1.jsonl",
+        "code/code_1.jsonl"
+      ],
+      "target_tokens": 640000,
+      "tokens": 649622,
+      "chars": 2958435,
+      "documents": 242,
+      "coverage": 1.015034375,
+      "status": "ok"
+    },
+    {
+      "bucket": "cascade2_reasoning",
+      "share": 0.16,
+      "repo": "nvidia/Nemotron-Cascade-SFT-Stage-2",
+      "revision": "54cfa23ba28c9d94aeae15142e73bde6f8d14d8b",
+      "files": [
+        "instruction-following.jsonl",
+        "tool_calling.jsonl",
+        "general/general_1.jsonl",
+        "math/math_1.jsonl",
+        "science.jsonl",
+        "swe_repair.jsonl",
+        "swe_localization.jsonl"
+      ],
+      "target_tokens": 640000,
+      "tokens": 668396,
+      "chars": 2880091,
+      "documents": 287,
+      "coverage": 1.04436875,
+      "status": "ok"
+    },
+    {
+      "bucket": "ko",
+      "share": 0.16,
+      "repo": "nvidia/Nemotron-SFT-Multilingual-v2",
+      "revision": "971a252224b75414b1b67c55dbe0446d8b6606a0",
+      "files": [
+        "ultra-v3_math_ko_translated_final.jsonl",
+        "ultra-v3_code_ko_translated_final.jsonl",
+        "ultra-v3_stem_ko_translated_postedit_final.jsonl"
+      ],
+      "target_tokens": 640000,
+      "tokens": 646547,
+      "chars": 2240850,
+      "documents": 165,
+      "coverage": 1.0102296875,
+      "status": "ok"
+    },
+    {
+      "bucket": "multilingual_other",
+      "share": 0.12,
+      "repo": "nvidia/Nemotron-SFT-Multilingual-v2",
+      "revision": "971a252224b75414b1b67c55dbe0446d8b6606a0",
+      "files": [
+        "ultra-v3_math_ja_translated_final.jsonl",
+        "ultra-v3_code_ja_translated_final.jsonl",
+        "ultra-v3_stem_ja_translated_postedit_final.jsonl",
+        "ultra-v3_math_pt_translated_final.jsonl",
+        "ultra-v3_code_pt_translated_final.jsonl",
+        "ultra-v3_stem_pt_translated_postedit_final.jsonl",
+        "ultra-v3_math_hi_translated_final.jsonl",
+        "ultra-v3_code_hi_translated_final.jsonl",
+        "ultra-v3_stem_hi_translated_postedit_final.jsonl"
+      ],
+      "target_tokens": 480000,
+      "tokens": 500663,
+      "chars": 1790051,
+      "documents": 132,
+      "coverage": 1.0430479166666666,
+      "status": "ok"
+    },
+    {
+      "bucket": "finance",
+      "share": 0.06,
+      "repo": "nvidia/Nemotron-SpecializedDomains-Finance-v1",
+      "revision": "5a21b106168facb96ced11b883c2a9b4788ee939",
+      "files": [
+        "data/train.jsonl"
+      ],
+      "target_tokens": 240000,
+      "tokens": 241023,
+      "chars": 736000,
+      "documents": 23,
+      "coverage": 1.0042625,
+      "status": "ok"
+    },
+    {
+      "bucket": "swe_agentic",
+      "share": 0.06,
+      "repo": "nvidia/Nemotron-SFT-SWE-v2",
+      "revision": "bd151f3f2d89c4804dda0083d912bd9f6a0a9fb7",
+      "files": [
+        "data/agentless.jsonl"
+      ],
+      "target_tokens": 240000,
+      "tokens": 243030,
+      "chars": 1062155,
+      "documents": 45,
+      "coverage": 1.012625,
+      "status": "ok"
+    },
+    {
+      "bucket": "code_algo",
+      "share": 0.06,
+      "repo": "nvidia/Nemotron-SFT-Competitive-Programming-v2",
+      "revision": "778afc98a9e027e10b3cd78020c120e93e142ef2",
+      "files": [
+        "data/exercism.jsonl",
+        "data/text_to_sql.jsonl",
+        "data/competitive_programming_python_00.jsonl"
+      ],
+      "target_tokens": 240000,
+      "tokens": 246845,
+      "chars": 977815,
+      "documents": 75,
+      "coverage": 1.0285208333333333,
+      "status": "ok"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "errors": [],
+  "file_bytes": 94162541472,
+  "file_gib": 87.69570055603981,
+  "files": [
+    "/motif3/artifacts/Motif-3-MQ87-FIT.gguf"
+  ],
+  "shard_count": 1,
+  "source_model": "Motif-Technologies/Motif-3",
+  "source_revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+  "status": "ok",
+  "tensor_bytes": 94152882712,
+  "tensor_count": 2287,
+  "type_tensor_counts": {
+    "BF16": 318,
+    "F32": 1273,
+    "IQ2_XXS": 102,
+    "Q2_K": 51,
+    "Q8_0": 543
+  },
+  "variant": "mq87"
+}

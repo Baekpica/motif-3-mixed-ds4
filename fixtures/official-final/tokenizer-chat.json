@@ -1,0 +1,741 @@
+{
+  "source": "Motif-Technologies/Motif-3",
+  "revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+  "tokenizer_sha256": "956d8a693e0ede5283c803aba3fe1d4b46b202d9faac007f947c6f5b61ce7864",
+  "chat_template_sha256": "998a066fd57a07187040a896e7fc455b2aa21dd490d156e82b63518be0a49297",
+  "bos_token_id": 1,
+  "eos_token_id": 0,
+  "pad_token_id": 0,
+  "fixture_sha256": "d52eb9cbebafd33bf0f0ee487d8074ec1b66e3f66fc8d6bb12b2c5a8a7218875",
+  "cases": [
+    {
+      "kind": "raw",
+      "name": "empty",
+      "text": "",
+      "ids": []
+    },
+    {
+      "kind": "raw",
+      "name": "ascii_words",
+      "text": "Hello world and lower words",
+      "ids": [
+        12944,
+        1624,
+        203262,
+        3219
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "ascii_case_boundaries",
+      "text": "HTTPServer lowerCamel UPPER CASE XMLParser",
+      "ids": [
+        21421,
+        15550,
+        3083,
+        165272,
+        194720,
+        68735,
+        12218,
+        43709
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "contractions",
+      "text": "I'm we're I'LL she'd can't they've",
+      "ids": [
+        6949,
+        5121,
+        1490,
+        4787,
+        47866,
+        3089,
+        14628
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "leading_punctuation",
+      "text": "(hello) [WORLD] +mixed -UPPER",
+      "ids": [
+        167,
+        30535,
+        168,
+        1143,
+        74099,
+        13370,
+        220,
+        723,
+        65415,
+        573,
+        212,
+        109660
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "numbers",
+      "text": "0 12 123 1234 1234567 １２３４ ١٢٣٤",
+      "ids": [
+        175,
+        351,
+        1005,
+        351,
+        9273,
+        351,
+        9273,
+        179,
+        351,
+        9273,
+        22593,
+        182,
+        351,
+        167641,
+        3031,
+        371,
+        3031,
+        372,
+        3031,
+        373,
+        351,
+        307,
+        254,
+        307,
+        255,
+        307,
+        256,
+        307,
+        257
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "whitespace",
+      "text": "  hello   world  \tend   ",
+      "ids": [
+        85,
+        30535,
+        86,
+        8057,
+        85,
+        103,
+        669,
+        86
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "newlines",
+      "text": "first\r\n\n  second\n\t\nthird",
+      "ids": [
+        14916,
+        141,
+        123,
+        85,
+        20691,
+        122,
+        103,
+        122,
+        55621
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "punctuation_slashes",
+      "text": "x != y///\n/\n...\r\n/path/to/file",
+      "ids": [
+        247,
+        11289,
+        453,
+        42180,
+        122,
+        174,
+        122,
+        1447,
+        141,
+        122,
+        96385,
+        33666,
+        51961
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "code",
+      "text": "def HTTPServer(x: int = 123456):\n    return x != 0\n",
+      "ids": [
+        4701,
+        9469,
+        15550,
+        1783,
+        185,
+        761,
+        511,
+        351,
+        9273,
+        22593,
+        3849,
+        122,
+        87,
+        14648,
+        1067,
+        11289,
+        351,
+        175,
+        122
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "korean",
+      "text": "안녕하세요 세계. Motif 모델 테스트입니다.",
+      "ids": [
+        26232,
+        6609,
+        173,
+        199085,
+        10463,
+        17268,
+        2628,
+        173
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "cjk_kana",
+      "text": "日本語テスト 中文分词 테스트",
+      "ids": [
+        75128,
+        70666,
+        151228,
+        6109,
+        42160,
+        17268
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "accents_combining",
+      "text": "Éclair déjà vu; Café naïve Straße",
+      "ids": [
+        31811,
+        72791,
+        80200,
+        57423,
+        186,
+        69068,
+        78189,
+        72703,
+        30226,
+        48014
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "cyrillic_greek",
+      "text": "Привет мир Αλφα ΒΗΤΑ Γάμμα",
+      "ids": [
+        32908,
+        12125,
+        83892,
+        39698,
+        5458,
+        101805,
+        94890,
+        52737,
+        48648,
+        32883,
+        17051,
+        10957,
+        163515
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "arabic",
+      "text": "مرحبا بالعالم ١٢٣٤",
+      "ids": [
+        58313,
+        8796,
+        99888,
+        39495,
+        6257,
+        74483,
+        351,
+        307,
+        254,
+        307,
+        255,
+        307,
+        256,
+        307,
+        257
+      ]
+    },
+    {
+      "kind": "raw",
+      "name": "emoji_symbols",
+      "text": "Hello 👋🏽 world — 2×GPU ≠ 4/GPU\n",
+      "ids": [
+        12944,
+        75404,
+        364,
+        69056,
+        281,
+        1624,
+        3033,
+        351,
+        177,
+        9574,
+        82785,
+        25010,
+        351,
+        179,
+        26404,
+        7443,
+        122
+      ]
+    },
+    {
+      "kind": "rendered_chat",
+      "name": "user_thinking",
+      "rendered": "<|beginoftext|><|startofturn|><|user|>Hello<|endofturn|><|startofturn|><|assistant|><think>",
+      "ids": [
+        1,
+        5,
+        3,
+        12944,
+        6,
+        5,
+        4,
+        11
+      ],
+      "arguments": {
+        "name": "user_thinking",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "add_generation_prompt": true,
+        "enable_thinking": true
+      }
+    },
+    {
+      "kind": "rendered_chat",
+      "name": "system_user_no_thinking",
+      "rendered": "<|beginoftext|><|startofturn|><|system|>You are precise.<|endofturn|><|startofturn|><|user|>Hello<|endofturn|><|startofturn|><|assistant|><think></think>",
+      "ids": [
+        1,
+        5,
+        2,
+        201868,
+        7104,
+        173,
+        6,
+        5,
+        3,
+        12944,
+        6,
+        5,
+        4,
+        11,
+        12
+      ],
+      "arguments": {
+        "name": "system_user_no_thinking",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are precise."
+          },
+          {
+            "role": "user",
+            "content": "Hello"
+          }
+        ],
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      }
+    },
+    {
+      "kind": "rendered_chat",
+      "name": "multiturn_thinking",
+      "rendered": "<|beginoftext|><|startofturn|><|system|>Answer briefly.<|endofturn|><|startofturn|><|user|>One plus one?<|endofturn|><|startofturn|><|assistant|><think>I should add the values.</think>Two.<|endofturn|><|startofturn|><|user|>Now double it.<|endofturn|><|startofturn|><|assistant|><think>",
+      "ids": [
+        1,
+        5,
+        2,
+        7936,
+        20035,
+        173,
+        6,
+        5,
+        3,
+        4751,
+        6778,
+        820,
+        190,
+        6,
+        5,
+        4,
+        11,
+        200,
+        1137,
+        202374,
+        2357,
+        173,
+        12,
+        14140,
+        173,
+        6,
+        5,
+        3,
+        3288,
+        5637,
+        489,
+        173,
+        6,
+        5,
+        4,
+        11
+      ],
+      "arguments": {
+        "name": "multiturn_thinking",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Answer briefly."
+          },
+          {
+            "role": "user",
+            "content": "One plus one?"
+          },
+          {
+            "role": "assistant",
+            "reasoning_content": "I should add the values.",
+            "content": "Two."
+          },
+          {
+            "role": "user",
+            "content": "Now double it."
+          }
+        ],
+        "add_generation_prompt": true,
+        "enable_thinking": true
+      }
+    },
+    {
+      "kind": "rendered_chat",
+      "name": "tools_and_response",
+      "rendered": "<|beginoftext|><|startofturn|><|system|># Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n\n<tools>\n{\"name\": \"get_weather\", \"description\": \"Get current weather.\", \"parameters\": {\"type\": \"object\", \"properties\": {\"city\": {\"type\": \"string\"}}, \"required\": [\"city\"]}}\n</tools>\n\nFor each function call, output in JSON within <tool_call> tags:\n\n<tool_call>{\"name\": \"get_weather\", \"arguments\": {\"city\": <city>}}</tool_call>\n\nUse tools when useful.<|endofturn|><|startofturn|><|user|>Weather in Seoul?<|endofturn|><|startofturn|><|assistant|>\n<tool_call>{\"name\": \"get_weather\", \"arguments\": {\"city\": \"Seoul\"}, \"id\": \"call_42\"}</tool_call><|endofturn|><|startofturn|><|tool|><tool_response>{\"tool_call_id\": \"call_42\", \"content\": {\"temperature_c\": 27, \"condition\": \"clear\"}}</tool_response><|endofturn|><|startofturn|><|user|>Summarize that.<|endofturn|><|startofturn|><|assistant|><think></think>",
+      "ids": [
+        1,
+        5,
+        2,
+        162,
+        15519,
+        123,
+        206544,
+        1579,
+        202831,
+        3124,
+        202809,
+        200085,
+        2832,
+        7878,
+        173,
+        123,
+        201868,
+        3531,
+        496,
+        1380,
+        28113,
+        2108,
+        1249,
+        45401,
+        7241,
+        45401,
+        189,
+        12218,
+        13790,
+        185,
+        123,
+        187,
+        45401,
+        189,
+        122,
+        17574,
+        3716,
+        2795,
+        607,
+        1169,
+        222,
+        47307,
+        2231,
+        607,
+        13427,
+        2795,
+        607,
+        6276,
+        2074,
+        6913,
+        10229,
+        607,
+        34636,
+        2795,
+        25290,
+        4848,
+        2795,
+        607,
+        11225,
+        2231,
+        607,
+        31365,
+        2795,
+        25290,
+        44212,
+        2795,
+        25290,
+        4848,
+        2795,
+        607,
+        6214,
+        161,
+        22467,
+        607,
+        29596,
+        2795,
+        20398,
+        44212,
+        12690,
+        1316,
+        122,
+        2117,
+        45401,
+        189,
+        123,
+        208680,
+        1380,
+        1579,
+        171,
+        3844,
+        420,
+        14311,
+        2108,
+        351,
+        13,
+        13790,
+        185,
+        123,
+        13,
+        17574,
+        3716,
+        2795,
+        607,
+        1169,
+        222,
+        47307,
+        2231,
+        607,
+        55649,
+        2795,
+        25290,
+        44212,
+        2795,
+        1249,
+        44212,
+        189,
+        1316,
+        14,
+        123,
+        7799,
+        3658,
+        888,
+        4063,
+        173,
+        6,
+        5,
+        3,
+        47096,
+        420,
+        57291,
+        190,
+        6,
+        5,
+        4,
+        122,
+        13,
+        17574,
+        3716,
+        2795,
+        607,
+        1169,
+        222,
+        47307,
+        2231,
+        607,
+        55649,
+        2795,
+        25290,
+        44212,
+        2795,
+        607,
+        132323,
+        47862,
+        607,
+        462,
+        2795,
+        607,
+        20935,
+        222,
+        4590,
+        44417,
+        14,
+        6,
+        5,
+        7,
+        15,
+        17574,
+        30928,
+        70321,
+        7423,
+        2795,
+        607,
+        20935,
+        222,
+        4590,
+        2231,
+        607,
+        12500,
+        2795,
+        25290,
+        61673,
+        3035,
+        2795,
+        351,
+        2358,
+        171,
+        607,
+        23589,
+        2795,
+        607,
+        16321,
+        161,
+        1316,
+        16,
+        6,
+        5,
+        3,
+        153686,
+        478,
+        173,
+        6,
+        5,
+        4,
+        11,
+        12
+      ],
+      "arguments": {
+        "name": "tools_and_response",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Use tools when useful."
+          },
+          {
+            "role": "user",
+            "content": "Weather in Seoul?"
+          },
+          {
+            "role": "assistant",
+            "content": "",
+            "tool_calls": [
+              {
+                "id": "call_42",
+                "type": "function",
+                "function": {
+                  "name": "get_weather",
+                  "arguments": {
+                    "city": "Seoul"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "call_42",
+            "content": {
+              "temperature_c": 27,
+              "condition": "clear"
+            }
+          },
+          {
+            "role": "user",
+            "content": "Summarize that."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "description": "Get current weather.",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ]
+              }
+            }
+          }
+        ],
+        "add_generation_prompt": true,
+        "enable_thinking": false
+      }
+    },
+    {
+      "kind": "rendered_chat",
+      "name": "completed_conversation",
+      "rendered": "<|beginoftext|><|startofturn|><|user|>Say hi.<|endofturn|><|startofturn|><|assistant|>Hi!<|endofturn|><|endoftext|>",
+      "ids": [
+        1,
+        5,
+        3,
+        44669,
+        16414,
+        173,
+        6,
+        5,
+        4,
+        12647,
+        160,
+        6,
+        0
+      ],
+      "arguments": {
+        "name": "completed_conversation",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Say hi."
+          },
+          {
+            "role": "assistant",
+            "content": "Hi!"
+          }
+        ],
+        "add_generation_prompt": false,
+        "enable_thinking": false
+      }
+    }
+  ]
+}

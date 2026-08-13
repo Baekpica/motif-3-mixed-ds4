@@ -1,0 +1,37 @@
+{
+  "target_tokens": 65536,
+  "actual_tokens": 65536,
+  "records": [
+    {
+      "record": 1,
+      "code": "MOTIF-65536-BEGIN-7Q2K",
+      "token_start": 6585,
+      "token_end": 6611
+    },
+    {
+      "record": 2,
+      "code": "MOTIF-65536-MIDDLE-9R4V",
+      "token_start": 32766,
+      "token_end": 32793
+    },
+    {
+      "record": 3,
+      "code": "MOTIF-65536-END-3X8P",
+      "token_start": 58948,
+      "token_end": 58974
+    }
+  ],
+  "question_token_start": 65511,
+  "expected_json": [
+    "MOTIF-65536-BEGIN-7Q2K",
+    "MOTIF-65536-MIDDLE-9R4V",
+    "MOTIF-65536-END-3X8P"
+  ],
+  "official_chat_template": true,
+  "enable_thinking": false,
+  "system_prompt": "You are a precise long-context retrieval assistant. Follow the user output format exactly.",
+  "rendered_chat_retokenizes_exactly": true,
+  "retokenized_tokens": 65536,
+  "decoded_equals_rendered_chat": true,
+  "rendered_chat_tail": " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x\nQUESTION: Return only a JSON array of the exact three RECORD codes in document order, with no explanation.\n<|endofturn|><|startofturn|><|assistant|><think></think>"
+}

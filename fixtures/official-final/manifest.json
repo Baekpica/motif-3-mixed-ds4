@@ -1,0 +1,490 @@
+{
+  "constants": {
+    "eps": 1e-06,
+    "expert": 173,
+    "h_post_coeff": 1.0,
+    "hidden_clamp": 1000000.0,
+    "mhc_expansion": 4,
+    "mhc_layer": 0,
+    "polynorm_bias_clamp": 0.5,
+    "polynorm_output_scale": 0.5,
+    "route_scale": 2.0,
+    "router_layer": 2,
+    "sinkhorn_iters": 20,
+    "top_k": 8
+  },
+  "fixtures": {
+    "gdla-expanded-layer0.npz": {
+      "arrays": {
+        "attention_bf16": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            128
+          ]
+        },
+        "attention_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            128
+          ]
+        },
+        "attention_scale": {
+          "dtype": "float32",
+          "shape": [
+            1
+          ]
+        },
+        "diff_attention_bf16": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            64,
+            128
+          ]
+        },
+        "diff_attention_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            64,
+            128
+          ]
+        },
+        "gate_score": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            64,
+            128
+          ]
+        },
+        "hidden": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            4096
+          ]
+        },
+        "k_full": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            16,
+            192
+          ]
+        },
+        "k_pe_after_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            1,
+            64
+          ]
+        },
+        "k_pe_before": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            1,
+            64
+          ]
+        },
+        "k_pe_probe_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            1,
+            64
+          ]
+        },
+        "lambda": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            64
+          ]
+        },
+        "output_bf16": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            4096
+          ]
+        },
+        "positions": {
+          "dtype": "int32",
+          "shape": [
+            8
+          ]
+        },
+        "probe_positions": {
+          "dtype": "int32",
+          "shape": [
+            8
+          ]
+        },
+        "q_full": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            192
+          ]
+        },
+        "q_pe_after_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            64
+          ]
+        },
+        "q_pe_before": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            64
+          ]
+        },
+        "q_pe_probe_fp32": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            80,
+            64
+          ]
+        },
+        "value": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            16,
+            128
+          ]
+        },
+        "yarn_inv_freq": {
+          "dtype": "float32",
+          "shape": [
+            32
+          ]
+        }
+      },
+      "runtime_fixture": {
+        "name": "gdla-expanded-layer0.ds4fx",
+        "sha256": "dba89d1ef241f771d771c0991bbe3ea9fc231ec2bc53d945c84f50286055626d"
+      },
+      "sha256": "cc075bb11cb2c79f41ba78c0aeea3ad4e15f2112f9087a9b3ddcccd2fd43aa0b",
+      "source_tensors_sha256": {
+        "model.layers.0.self_attn.kv_norm.weight": "e6b9b1af595074a5a1f37ee4d2c22ac36b4f3e0fad39e0344852755e4bebcb74",
+        "model.layers.0.self_attn.lambda_proj.weight": "6d6d9868e33bb6897bf48455944b2c0db1ea85a79bfff3f69bf64137740fa100",
+        "model.layers.0.self_attn.q_norm.weight": "d18a8b8ae649d8689ed0102b1728c27230fe5b48f102c6d39d81f682b886e783",
+        "model.layers.0.self_attn.wkv_a.weight": "59c64c3aad5c1804a6c565a366f4e03a68f0f911a62f534fd2964c061751a90a",
+        "model.layers.0.self_attn.wkv_b.weight": "1574583ed296982112b207e8a6e192db2f6fdd5306af68462a066997db98c288",
+        "model.layers.0.self_attn.wo.weight": "44bf8260f797bcd45391e64828454ff843900d82f238c4acb52732f7b481e2ba",
+        "model.layers.0.self_attn.wq_a.weight": "239abf9f8fc8f5b6247b9fd632c4c5f8d4a800e6433076672720e49ce2b4b26d",
+        "model.layers.0.self_attn.wq_b.weight": "9fec1a34359e7849810f51588774e17d05cfe0ea78b648c2a3fa469d364b2d34",
+        "model.layers.0.self_attn.wq_b_gate.weight": "5918d648ea9ea4161a7db9373f8715fa83f86c2155d5496d97ba44dd0137853b"
+      }
+    },
+    "mhc-layer0-attn.npz": {
+      "arrays": {
+        "alpha_post": {
+          "dtype": "float32",
+          "shape": [
+            1
+          ]
+        },
+        "alpha_pre": {
+          "dtype": "float32",
+          "shape": [
+            1
+          ]
+        },
+        "alpha_res": {
+          "dtype": "float32",
+          "shape": [
+            1
+          ]
+        },
+        "bias_post": {
+          "dtype": "float32",
+          "shape": [
+            4
+          ]
+        },
+        "bias_pre": {
+          "dtype": "float32",
+          "shape": [
+            4
+          ]
+        },
+        "bias_res": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            4
+          ]
+        },
+        "h_post": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4
+          ]
+        },
+        "h_pre": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4
+          ]
+        },
+        "h_res": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4,
+            4
+          ]
+        },
+        "hidden": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4,
+            4096
+          ]
+        },
+        "projected_post": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4
+          ]
+        },
+        "projected_pre": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4
+          ]
+        },
+        "projected_res": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4,
+            4
+          ]
+        },
+        "reduced_input": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4096
+          ]
+        },
+        "residual_mixed": {
+          "dtype": "float32",
+          "shape": [
+            1,
+            4,
+            4,
+            4096
+          ]
+        }
+      },
+      "runtime_fixture": {
+        "name": "mhc-layer0-attn.ds4fx",
+        "sha256": "b99ba641ad3e9dc25303acc9372f821c7234eb273a403f61596da667eeb28caa"
+      },
+      "sha256": "8f172ff394b0d81fead34ac32e766186e6a54b8efc97b32d929858d19d0695b9",
+      "source_tensors_sha256": {
+        "model.layers.0.mhc_attn.alpha_post": "c34b54f384d907fd9f6b93b8d1b2d7bcd6205b5e554fef4f26a4dd7375440bbc",
+        "model.layers.0.mhc_attn.alpha_pre": "cf96f1f20884aad1e901a76f3644973b3464005fda63163f2e4557d38e0df5ba",
+        "model.layers.0.mhc_attn.alpha_res": "3d040094bd5d5a0565f352c8cad5cb6999084a6ab29259b326f2d687febb54bb",
+        "model.layers.0.mhc_attn.bias_post": "344c0376371cf9adc09b9c4978bcc10601132ce158fdae4e9430a92d3c75c0fa",
+        "model.layers.0.mhc_attn.bias_pre": "36dc2772a45c879d211d9751518d7237c32a326d5142fc238fd351960216263d",
+        "model.layers.0.mhc_attn.bias_res": "2283c2088ea409cabd73cf1a5a8af6bfb83b744c66210daa0e9d2e47f6e3c19c",
+        "model.layers.0.mhc_attn.proj_post.weight": "3eb74fe5e25f0b242eb94cc766904d3d81825d48b956c130c5eaff4b0771c927",
+        "model.layers.0.mhc_attn.proj_pre.weight": "adb25fb5d2291076705fd9838285a0cfc2e6d8d81e9e9260566e4a15bfe51b9d",
+        "model.layers.0.mhc_attn.proj_res.weight": "0f42ba49b2982f26105d7974d49976869796e280ae1f8dbdca5f38412cc02635",
+        "model.layers.0.mhc_attn.rms_norm.weight": "72cf2a544c8f8471e0e168a6a049d9bc503cd13554b96ad181dcd8274227b29e"
+      }
+    },
+    "polynorm-layer2-expert173.npz": {
+      "arrays": {
+        "activated_bf16": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            1280
+          ]
+        },
+        "activated_fp32": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            1280
+          ]
+        },
+        "down_output_bf16": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            4096
+          ]
+        },
+        "gate": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            1280
+          ]
+        },
+        "hidden": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            4096
+          ]
+        },
+        "raw_bias": {
+          "dtype": "float32",
+          "shape": [
+            1
+          ]
+        },
+        "raw_coeff": {
+          "dtype": "float32",
+          "shape": [
+            3
+          ]
+        },
+        "up": {
+          "dtype": "float32",
+          "shape": [
+            4,
+            1280
+          ]
+        }
+      },
+      "runtime_fixture": {
+        "name": "polynorm-layer2-expert173.ds4fx",
+        "sha256": "2285dd87d706550cb05a6b03060a39cacb34eace6f252e8b303c03f7e44238ae"
+      },
+      "sha256": "50ddaf219b4a0c41023fdc7bd0aae6430ff182cbd2ea55c2c89f587045c1eb88",
+      "source_tensors_sha256": {
+        "model.layers.2.moe.experts.act_fn.bias[173]": "4a1b18efe29a1a3c29a5a7612f39ba432e99307a71ca802a116d1797b736aeba",
+        "model.layers.2.moe.experts.act_fn.weight[173]": "29daaf499e06d6c93213e0fce9d77263c44e9f1424a0b910124e9e68da857be0",
+        "model.layers.2.moe.experts.down_proj[173]": "4aaae21f2ef7a36ecc938ed09d41ca30188abfc2d2dc7ac3c8c5689ecf57511f",
+        "model.layers.2.moe.experts.gate_up_proj[173]": "c74457623f0f5a580b5f4e0b35c9f7867e8bc90ed7a0c913decfe080bd266c9e"
+      }
+    },
+    "router-layer2.npz": {
+      "arrays": {
+        "expert_bias": {
+          "dtype": "float32",
+          "shape": [
+            384
+          ]
+        },
+        "hidden": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            4096
+          ]
+        },
+        "logits": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            384
+          ]
+        },
+        "route_weights": {
+          "dtype": "float32",
+          "shape": [
+            8,
+            8
+          ]
+        },
+        "selected_experts": {
+          "dtype": "int32",
+          "shape": [
+            8,
+            8
+          ]
+        }
+      },
+      "runtime_fixture": {
+        "name": "router-layer2.ds4fx",
+        "sha256": "2f5d66bfb72424c49ac69ae0adcae2036f670c9debfcac6a95ce007c5e2e545e"
+      },
+      "sha256": "9ed4d0ea0386417653e763fee49abece894ba455cd7abadeaf628a041fb90988",
+      "source_tensors_sha256": {
+        "model.layers.2.moe.expert_bias": "0b8a559e8e4e70e125da3048012a45f92cc3233c08a5975f595361412450564a",
+        "model.layers.2.moe.router.gate.weight": "a711925c700610cb896be635ea06bbed18bfdeeadfc4b26b17c5ef3327c30f7c"
+      }
+    }
+  },
+  "generator": {
+    "cuda_device": "NVIDIA H200",
+    "device": "cuda:0",
+    "tf32": false,
+    "torch": "2.11.0+cu130"
+  },
+  "reference_contract": {
+    "mhc": "BF16 projections with FP32 RMS/control, clamp, sigmoid, 20-step FP32 Sinkhorn, h_post coefficient 1",
+    "polynorm": "per-expert sigmoid(coeff), FP32 moments/poly/multiply, BF16 cast before scale/down",
+    "router": "fp32 sigmoid(logits), correction bias for selection only, top-8, renorm, scale 2"
+  },
+  "schema_version": 1,
+  "source": {
+    "config_sha256": "30f14b635d3258a18c3ff7e69829f8fbfa775e87477ffabb59a79115bba820a5",
+    "repo": "Motif-Technologies/Motif-3",
+    "revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+    "shards": {
+      "model.layers.0.mhc_attn.alpha_post": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.alpha_pre": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.alpha_res": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.bias_post": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.bias_pre": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.bias_res": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.proj_post.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.proj_pre.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.proj_res.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.mhc_attn.rms_norm.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.kv_norm.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.lambda_proj.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.q_norm.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wkv_a.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wkv_b.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wo.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wq_a.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wq_b.weight": "model-00001-of-00155.safetensors",
+      "model.layers.0.self_attn.wq_b_gate.weight": "model-00001-of-00155.safetensors",
+      "model.layers.2.moe.expert_bias": "model-00002-of-00155.safetensors",
+      "model.layers.2.moe.experts.act_fn.bias": "model-00004-of-00155.safetensors",
+      "model.layers.2.moe.experts.act_fn.weight": "model-00004-of-00155.safetensors",
+      "model.layers.2.moe.experts.down_proj": "model-00003-of-00155.safetensors",
+      "model.layers.2.moe.experts.gate_up_proj": "model-00105-of-00155.safetensors",
+      "model.layers.2.moe.router.gate.weight": "model-00004-of-00155.safetensors"
+    }
+  },
+  "source_policy": "official-final-only"
+}

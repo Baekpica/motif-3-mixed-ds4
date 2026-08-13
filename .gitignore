@@ -1,0 +1,19 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.pyc
+
+# Large generated assets live outside the Git checkout or in the private
+# Spark handoff bucket.
+calibration/calibration.txt
+calibration/coverage-supplement.txt
+artifacts/
+build/
+logs/
+handoff-stage/
+*.gguf
+*.imatrix
+*.safetensors
+*.partial
+*.dat

@@ -1,0 +1,47 @@
+{
+  "source_model": "Motif-Technologies/Motif-3",
+  "source_revision": "ccceb1a5fd7b5eb32e47841216b3caf5666c07bc",
+  "fixture_version": 2,
+  "token_count_semantics": "official rendered chat including no-think assistant prefix",
+  "system_prompt": "You are a precise long-context retrieval assistant. Follow the user output format exactly.",
+  "tokenizer_class": "TokenizersBackend",
+  "vocab_size": 220160,
+  "fixtures": [
+    {
+      "target_tokens": 32768,
+      "tokens": "context-32768.tokens.npy",
+      "text": "context-32768.txt",
+      "answer": "context-32768.answer.json",
+      "tokens_sha256": "6df22ec5d9e931a33fa59d4cdd7a56053a95553256c7e8367b294f0b6933016d",
+      "text_sha256": "c81b23017d2fe1d7ca918b989a8acf5d8d6838ebb826a0d67cbe9b1ec48fdd6a",
+      "answer_sha256": "111ee0630b047bb81fdf9c5fd422d8b0ba4c3e9f0f117b417eb8d036805cd127"
+    },
+    {
+      "target_tokens": 65536,
+      "tokens": "context-65536.tokens.npy",
+      "text": "context-65536.txt",
+      "answer": "context-65536.answer.json",
+      "tokens_sha256": "6ee0ebfd3be6428d083f8cca93380f8bc9104eb765296221536477ee19471dac",
+      "text_sha256": "7716b2a3fcb99e9fbd858af087a8a3af77177a8313b0233edd2447ecfa1d8110",
+      "answer_sha256": "df0a1350cb43c36e05b4d488ef72580344015f9fc19e566ca74d58a5588c91f9"
+    },
+    {
+      "target_tokens": 131072,
+      "tokens": "context-131072.tokens.npy",
+      "text": "context-131072.txt",
+      "answer": "context-131072.answer.json",
+      "tokens_sha256": "24cbef16d5ab9581c8e66e0d6f2fbea3532f3c33b3e5255abd153c2e44403541",
+      "text_sha256": "73ad4ac5e23804ce07faf1e2d3c670b5b5bd3b1a1108768c5bfde1772f74eb89",
+      "answer_sha256": "9a3d4c63508d0c194f444fefb3461a24eaf8e10fccc501dae46c313368ec6e99"
+    },
+    {
+      "target_tokens": 262144,
+      "tokens": "context-262144.tokens.npy",
+      "text": "context-262144.txt",
+      "answer": "context-262144.answer.json",
+      "tokens_sha256": "ce0813c8b5e799665d20143d37223e7faf72b8261eaca04e34bf82e89ac473ca",
+      "text_sha256": "58bb7090cdfc5171841fb14ac0fca5afcaaa6d29615644be4e82c041180ae05f",
+      "answer_sha256": "80e71cb0437186d62e8e92e1b2dfca5bcd8a0ba9a6400608622e449acec2fafd"
+    }
+  ]
+}
