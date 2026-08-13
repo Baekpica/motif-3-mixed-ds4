@@ -79,6 +79,7 @@
     "revision": "bbce7eecf54703ae315328d4e240531c5a9f1a22",
     "public_reproduction": "https://github.com/Baekpica/motif-3-mixed-ds4",
     "build_arch": "sm_90",
+    "build_arch_verification": "cuobjdump verified every CUDA code object in ds4, ds4-server, test_motif3_cuda, and test_motif3_resident as sm_90",
     "native_family": "motif3",
     "full_attention_layers": 14,
     "swa_layers": 39,
@@ -88,24 +89,24 @@
     "expanded_historical_kv_persistent": false,
     "ssd_streaming": false,
     "cpu_weight_offload": false,
-    "long_run_note": "128K/256K processes started before the source-page discard fix; that fix changes host mmap reclamation only, not the native numerical graph. The final overlay separately passed the complete resident graph/cache regression.",
+    "long_run_note": "The OpenAI 32K and native 64K/128K/256K runs predate the explicit native-sm_90 rebuild; 128K/256K also predate the source-page discard fix. They execute the same source graph on H200 through the toolkit-compatible default CUDA code object with sm_90 MMQ objects, so their timings are correctness bring-up data rather than native-sm_90 performance claims. The final overlay has every CUDA code object verified as sm_90, passed the complete resident graph/cache regression, and passed a separate exact native-sm_90 32K long gate.",
     "strict_residency": {
       "status": "passed",
       "model_bytes": 94162541472,
-      "model_copy_seconds": 9.628,
-      "model_runtime_cuda_delta_bytes": 97991524352,
-      "model_runtime_cuda_delta_gib": 91.26171875,
+      "model_copy_seconds": 9.56,
+      "model_runtime_cuda_delta_bytes": 97438334976,
+      "model_runtime_cuda_delta_gib": 90.746520996094,
       "cuda_total_bytes": 150109880320,
       "source_mapping_rss_kib_before_fix": 91955608,
       "source_mapping_rss_kib_after_copy": 9416,
-      "source_mapping_rss_kib_after_inference": 29512,
+      "source_mapping_rss_kib_after_inference": 29640,
       "source_mapping_rss_limit_kib": 262144,
       "latent_256k_payload_bytes": 4236751872,
       "latent_256k_payload_gib": 3.9457826614379883,
       "latent_256k_cuda_delta_bytes": 4334813184,
       "latent_256k_cuda_delta_gib": 4.037109375,
-      "combined_model_runtime_and_256k_delta_bytes": 102326337536,
-      "combined_model_runtime_and_256k_delta_gib": 95.298828125
+      "combined_model_runtime_and_256k_delta_bytes": 101773148160,
+      "combined_model_runtime_and_256k_delta_gib": 94.783630371094
     }
   },
   "native_numerical_gates": {
@@ -123,11 +124,11 @@
     "mtp_logits_finite": true
   },
   "native_short_performance": {
-    "expanded_21_token_prefill_tps": 79.52,
-    "latent_21_token_prefill_tps": 127.69,
-    "one_chunk_200_token_prefill_tps": 387.79,
-    "prefix_extend_200_token_prefill_tps": 219.50,
-    "following_decode_tps": 19.173
+    "expanded_21_token_prefill_tps": 78.23,
+    "latent_21_token_prefill_tps": 127.71,
+    "one_chunk_200_token_prefill_tps": 388.13,
+    "prefix_extend_200_token_prefill_tps": 220.28,
+    "following_decode_tps": 19.38
   },
   "context_gates": [
     {
@@ -142,9 +143,12 @@
     {
       "source_tokens": 32768,
       "prompt_tokens": 32768,
+      "generated_tokens": 43,
+      "evals": 43,
+      "build_arch": "sm_90 (all code objects verified)",
       "interface": "native standalone",
-      "prefill_tps": 125.25,
-      "decode_tps": 1.946,
+      "prefill_tps": 125.34,
+      "decode_tps": 1.942,
       "correctness": "exact beginning/middle/end JSON",
       "status": "passed"
     },

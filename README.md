@@ -27,9 +27,9 @@ or distilled.
 
 `87-88 GiB` is a nominal capacity class, not a cosmetic hard cutoff. This
 artifact was accepted at its measured 87.6957 GiB without another
-precision-reducing pass. On H200, the resident model/runtime plus a native
-262,144-token latent-cache session produced a combined 95.298828125 GiB CUDA
-allocation delta. Actual GB10 unified-memory residency and OS headroom remain
+precision-reducing pass. On the final native-`sm_90` H200 build, the resident
+model/runtime plus a 262,144-token latent-cache session produced a combined
+94.783630371094 GiB CUDA allocation delta. Actual GB10 unified-memory residency and OS headroom remain
 target-host measurements.
 
 ## Pinned inputs

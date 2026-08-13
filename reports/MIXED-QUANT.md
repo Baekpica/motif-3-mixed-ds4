@@ -86,10 +86,10 @@ layers, 384E top-8 routing, shared experts, and complete MTP weights.
 
 ## Native H200 execution evidence
 
-The `sm_90` CUDA build copied the complete 87.70 GiB image into one H200 in
-9.315–10.924 seconds. Strict Motif residency rejects a failed device copy
+The final explicitly rebuilt `sm_90` CUDA path copied the complete 87.70 GiB
+image into one H200 in 9.560 seconds. Strict Motif residency rejects a failed device copy
 rather than continuing through a host-mapped/no-copy path. The dedicated gate
-measured a `97,991,524,352`-byte CUDA free-memory delta for model and runtime
+measured a `97,438,334,976`-byte CUDA free-memory delta for model and runtime
 initialization. No SSD streaming, CPU weight offload, or multi-tier expert
 cache was enabled.
 

@@ -96,11 +96,17 @@ experts, per-expert PolyNorm, modified mHC, YaRN, interleaved full/SWA GDLA,
 differential signal/noise heads, the input-dependent lambda, output gate,
 latent attention state, and the MTP weight graph.
 
+The final rebuild used `make -B ... CUDA_ARCH=sm_90`; `cuobjdump --list-elf`
+then reported only `sm_90` code objects for `ds4`, `ds4-server`, the CUDA
+fixture binary, and the resident regression binary. This explicit check caught
+and replaced an earlier cached default-codegen object before the final resident
+measurements below were frozen.
+
 Non-streaming Motif startup now requires a complete device copy. A server
 launch fails if the 87.70 GiB image cannot become device-resident instead of
-silently retaining a host-mapped/no-copy weight path. Full copies measured
-9.315–10.924 seconds. The dedicated residency gate measured a
-`97,991,524,352`-byte CUDA free-memory delta for the model plus runtime
+silently retaining a host-mapped/no-copy weight path. The final explicitly
+rebuilt `sm_90` resident gate copied the model in `9.560` seconds and measured a
+`97,438,334,976`-byte (`90.746520996094 GiB`) CUDA free-memory delta for the model plus runtime
 initialization versus the `94,162,541,472`-byte GGUF. Engine close returned to
 within the test's release tolerance. SSD streaming, CPU weight offload,
 multi-tier weight caching, and distributed placement were disabled.
@@ -117,14 +123,20 @@ which is required before unified-memory admission on Spark.
 
 The dedicated resident regression now enforces a `262,144 kB` ceiling both
 immediately after CUDA copy and after sparse, expanded/latent, MTP, chunked
-decode, and 256K-cache exercises. Its final run measured `9,416 kB` after copy
-and `29,512 kB` after all inference work, passing both checks.
+decode, and 256K-cache exercises. Its final native-`sm_90` run measured
+`9,416 kB` after copy and `29,640 kB` after all inference work, passing both
+checks.
 
-The isolated 128K/256K processes had already started when the source-page
-discard fix was added. That fix changes host mmap reclamation only, not model
-math, cache contents, tokenization, or generation. The final overlay was
-rebuilt and separately passed the complete resident native graph/cache gate;
-the long numerical results below come from the unchanged execution graph.
+The earlier OpenAI 32K and native 64K run, plus the isolated 128K/256K
+processes, predate the explicit native-`sm_90` rebuild; the 128K/256K jobs also
+started before the source-page discard fix. Those runs execute the same source
+graph on H200 through the toolkit-compatible default CUDA code object, while
+their MMQ objects are `sm_90`; their timings are therefore correctness bring-up
+data, not native-`sm_90` performance claims. The final overlay was rebuilt with
+every CUDA code object verified as `sm_90` by `cuobjdump` and separately passed
+the complete resident native graph/cache gate. A separately linked all-`sm_90`
+long binary then passed the exact 32K retrieval gate at 125.34 tok/s prefill
+and 1.942 tok/s decode while the isolated 256K process continued on GPU 3.
 
 ## Numerical and structural fixtures
 
@@ -152,8 +164,8 @@ experts, measured PolyNorm NRMSE `2.63e-11`, Q2 down-projection cosine
 ## Expanded-path bring-up and production latent state
 
 The official-style expanded historical K/V executor remains an independent
-short-context oracle. On a 21-token prompt it ran at 77.71 tok/s. The
-production latent executor ran at 127.27 tok/s; both selected the same first
+short-context oracle. On the final `sm_90` build, a 21-token prompt ran at
+78.23 tok/s. The production latent executor ran at 127.71 tok/s; both selected the same first
 token and all top-8 logits overlapped. Full-logit cosine was `0.99490164` with
 NRMSE `0.10087`.
 
@@ -161,9 +173,9 @@ Production sessions persist normalized `kv_latent`, rotated `k_pe`, bounded
 SWA rings, position/cache identity, and a separate MTP cache frontier. They do
 not persist expanded historical K/V. A direct 256-row pass and chunked prefix
 extension agreed on the first token and top-8 logits; an identical 64-row
-suffix replay produced logit cosine `1.0` and NRMSE `0`. The gate measured
-385.48 tok/s for a one-chunk pass, 218.13 tok/s for prefix extension, and
-19.099 tok/s for the following decode token.
+suffix replay produced logit cosine `1.0` and NRMSE `0`. The final `sm_90` gate
+measured 388.13 tok/s for a one-chunk pass, 220.28 tok/s for prefix extension,
+and 19.380 tok/s for the following decode token.
 
 With the model still resident, creating a native 262,144-token session
 allocated `4,236,751,872` bytes (`3.946 GiB`) of tensor payload and caused a
@@ -173,8 +185,9 @@ full-history latent/RoPE state only for the 14 full-attention layers; the other
 39 target layers and MTP retain bounded rings. The residency/session gate
 passed without SSD streaming or CPU weight offload.
 
-Adding that session delta to the resident model/runtime initialization delta
-gives `102,326,337,536` bytes (`95.298828125 GiB`) on H200. This is useful
+Adding that session delta to the final native-`sm_90` model/runtime
+initialization delta gives `101,773,148,160` bytes
+(`94.783630371094 GiB`) on H200. This is useful
 capacity evidence, but it is not a substitute for GB10 unified-memory and
 `MemAvailable` measurement.
 
@@ -227,7 +240,7 @@ is therefore 262,080 tokens and the admitted context remains exactly 262,144.
 | Gate | Interface | Prefill | Decode | Result |
 |---:|---|---:|---:|---|
 | 2K | OpenAI chat | 346.72 tok/s | 12.64 tok/s | exact three-code JSON |
-| 32K | native standalone | 125.25 tok/s | 1.946 tok/s | exact three-code JSON |
+| 32K | native standalone, all-`sm_90` | 125.34 tok/s | 1.942 tok/s | exact three-code JSON; 43-token decode |
 | 32K | OpenAI chat | 124.92 tok/s | 1.95 tok/s | exact three-code JSON; 32,768 prompt tokens |
 | 64K | native standalone | 68.54 tok/s | 1.023 tok/s | exact three-code JSON |
 | 128K | native standalone | 36.34 tok/s | 0.525 tok/s | exact three-code JSON; 131,072-token prompt + 49-token decode |

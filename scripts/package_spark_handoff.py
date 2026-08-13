@@ -15,6 +15,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_MIXED_WEIGHT_REVISION = "efd6044e25e7f8e3b459a737d021091e2e69b6c6"
+EXPECTED_Q8_WEIGHT_REVISION = "5c266c95bf8c8d822d50e5e1cce9d108eaadb2af"
 
 
 def parse_args() -> argparse.Namespace:
@@ -112,14 +114,22 @@ def main() -> int:
             char not in "0123456789abcdef" for char in revision
         ):
             raise SystemExit(f"{option} must be a 40-character lowercase SHA")
+    if args.model_revision != EXPECTED_MIXED_WEIGHT_REVISION:
+        raise SystemExit(
+            "--model-revision must be the immutable mixed-weight revision "
+            + EXPECTED_MIXED_WEIGHT_REVISION
+        )
+    if args.q8_revision != EXPECTED_Q8_WEIGHT_REVISION:
+        raise SystemExit(
+            "--q8-revision must be the immutable Q8-weight revision "
+            + EXPECTED_Q8_WEIGHT_REVISION
+        )
     if args.out.exists() and (
         not args.out.is_dir() or any(args.out.iterdir())
     ):
         raise SystemExit(f"refusing to overwrite non-empty handoff: {args.out}")
 
-    reproduction_status = git_output(
-        ROOT, "status", "--short", "--untracked-files=no"
-    )
+    reproduction_status = git_output(ROOT, "status", "--short")
     if reproduction_status:
         raise SystemExit(
             "refusing to package a reproduction tree with tracked changes:\n"
@@ -258,10 +268,17 @@ def main() -> int:
     (model_dir / "filenames.txt").write_text(
         "".join(f"{path.name}\n" for path in shards), encoding="utf-8"
     )
-    (model_dir / "sha256.txt").write_text(
-        "".join(f"{sha256(path)}  {path.name}\n" for path in shards),
-        encoding="utf-8",
+    shard_hashes = "".join(
+        f"{sha256(path)}  {path.name}\n" for path in shards
     )
+    published_hashes = (
+        ROOT / "publish/mixed/MQ87-88-FIT-SHA256SUMS"
+    ).read_text(encoding="utf-8")
+    if shard_hashes != published_hashes:
+        raise SystemExit(
+            "local mixed shards do not match the published SHA-256 manifest"
+        )
+    (model_dir / "sha256.txt").write_text(shard_hashes, encoding="utf-8")
     copy_file(ROOT / "publish/mixed/README.md", model_dir / "model-card.md")
     (model_dir / "q8-reference.txt").write_text(
         f"Baekpica/Motif-3-GGUF@{args.q8_revision}\n",

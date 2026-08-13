@@ -117,7 +117,8 @@ CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   token arrays and include beginning/middle/end retrieval answers.
 - The `sm_90` ds4 CLI/server build completed and a strict full-image copy made
   the 87.70 GiB mixed GGUF resident on one H200 without SSD streaming or CPU
-  weight offload; CUDA free-memory delta was 97,991,524,352 bytes.
+  weight offload; the final native-`sm_90` CUDA free-memory delta was
+  97,438,334,976 bytes.
 - The native Motif graph now owns GDLA, mHC, PolyNorm, dense/shared/routed MoE,
   latent cache, official chat/tool semantics, and the MTP weight path. It never
   falls through to the generic DeepSeek graph.
@@ -126,7 +127,8 @@ CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   (4.037 GiB) with the model still resident.
 - After resident CUDA preparation, the raw GGUF tensor mapping is explicitly
   discarded. H200 `/proc` evidence reduced that mapping from 91,955,608 kB RSS
-  to 9,416 kB after copy and 29,512 kB after the complete resident regression.
+  to 9,416 kB after copy and 29,640 kB after the final native-`sm_90`
+  resident regression.
   Recheck this behavior and final `MemAvailable` on GB10; do not set
   `DS4_CUDA_KEEP_MODEL_PAGES` for the capacity run.
 - Short-context expanded/latent parity, chunk/ring lifecycle, OpenAI 2K,
@@ -149,10 +151,10 @@ unified-memory overhead and runtime pools remain target-host measurements:
 | Pool | Projected size |
 |---|---:|
 | Public split GGUF aggregate | 87.69570 GiB |
-| H200 resident model/runtime initialization delta | 97,991,524,352 bytes (91.26171875 GiB) measured |
+| H200 resident model/runtime initialization delta | 97,438,334,976 bytes (90.746520996094 GiB) measured on native `sm_90` build |
 | Latent KV + RoPE key + bounded SWA ring payload at 262,144 | 4,236,751,872 bytes (3.946 GiB) measured |
 | H200 CUDA allocation delta for that session | 4,334,813,184 bytes (4.037 GiB) measured |
-| H200 combined model/runtime + 256K-session delta | 102,326,337,536 bytes (95.298828125 GiB) measured |
+| H200 combined model/runtime + 256K-session delta | 101,773,148,160 bytes (94.783630371094 GiB) measured |
 | Steady CUDA workspace budget | up to 6 GiB |
 | Server/session budget | up to 3 GiB |
 | Required final `MemAvailable` | at least 8 GiB |

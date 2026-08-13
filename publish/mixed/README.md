@@ -176,8 +176,8 @@ allocator overhead. This is a physical H200 measurement, not a Spark claim.
 Physical unified-memory residency and OS headroom on the target GB10 remain
 authoritative.
 
-The H200 model/runtime initialization delta plus the 256K-session delta was
-102,326,337,536 bytes (95.298828125 GiB). This supports the capacity design;
+The final native-`sm_90` H200 model/runtime initialization delta plus the
+256K-session delta was 101,773,148,160 bytes (94.783630371094 GiB). This supports the capacity design;
 it does not predict GB10 driver, allocator, or OS overhead.
 
 ## Runtime compatibility
@@ -227,10 +227,10 @@ Q8_0, `0.9417932` for IQ2_XXS, and `0.9580462` for Q2_K. The native ds4
 Motif-3 binder also accepted the completed mixed artifact as the official-final
 53-layer, 14-full/39-SWA, 384E top-8 topology with MTP present.
 
-The rebuilt `sm_90` runtime copied the full 87.70 GiB image into one H200 in
-9.315–10.924 seconds without SSD streaming or CPU weight offload. The measured
+The final explicitly rebuilt `sm_90` runtime copied the full 87.70 GiB image
+into one H200 in 9.560 seconds without SSD streaming or CPU weight offload. The measured
 CUDA free-memory delta for model and runtime initialization was
-97,991,524,352 bytes. Strict residency fails startup instead of silently using
+97,438,334,976 bytes. Strict residency fails startup instead of silently using
 host-mapped weights.
 
 Once optional CUDA preparation finishes, ds4 discards the raw GGUF tensor
@@ -240,8 +240,8 @@ the raw file is not kept as a second steady physical weight image beside the
 CUDA-owned model copy.
 
 The automated resident gate caps this mapping at 262,144 kB both after copy
-and after native graph/cache execution. Its final H200 run measured 9,416 kB
-and 29,512 kB respectively.
+and after native graph/cache execution. Its final native-`sm_90` H200 run
+measured 9,416 kB and 29,640 kB respectively.
 
 The native expanded-path oracle and production latent path selected the same
 first token and all top-8 logits on the short fixture; full-logit cosine was
@@ -255,11 +255,20 @@ teacher-forced rows with finite logits.
 | Gate | Interface | Prefill | Decode | Correctness |
 |---:|---|---:|---:|---|
 | 2K | OpenAI chat | 346.72 tok/s | 12.64 tok/s | exact beginning/middle/end JSON |
-| 32K | native | 125.25 tok/s | 1.946 tok/s | exact beginning/middle/end JSON |
+| 32K | native, all-`sm_90` | 125.34 tok/s | 1.942 tok/s | exact beginning/middle/end JSON; 43-token decode |
 | 32K | OpenAI chat | 124.92 tok/s | 1.95 tok/s | exact JSON; 32,768 prompt tokens |
 | 64K | native | 68.54 tok/s | 1.023 tok/s | exact beginning/middle/end JSON |
 | 128K | native | 36.34 tok/s | 0.525 tok/s | exact JSON; 131,072-token prompt + 49-token decode |
 | 256K | native | running | running | isolated H200 gate in progress |
+
+The OpenAI 32K and native 64K/128K/256K rows predate the final explicit
+`sm_90` rebuild and execute on H200 through the CUDA toolkit-compatible default
+code object, with MMQ already at `sm_90`. Their rates are correctness bring-up
+data, not native-`sm_90` performance claims. The final overlay has every CUDA
+code object verified as `sm_90`, passes the full resident graph/cache
+regression, and separately passes the exact native-`sm_90` 32K row shown
+above. Precision, topology, and context were not reduced to improve these
+figures.
 
 The OpenAI server also completed a structured `get_weather` tool-call/result
 loop. Its no-thinking continuation reused the full 165-token live prefix and
