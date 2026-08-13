@@ -1,0 +1,35 @@
+Final native-sm90 runtime audit
+================================
+
+Audit time: 2026-08-13 20:29 UTC
+Runtime revision: fa3f24f84f52fc91a0769b2eca021c95b422746e
+Final handoff note: d878ea1 changes only the 256K standalone fixture-tail
+constant; runtime/server/CUDA objects audited here are otherwise unchanged.
+Host: NVIDIA H200
+
+cuobjdump --list-elf architecture inventory:
+  ds4: sm_90 only
+  ds4-server: sm_90 only
+  tests/test_motif3_cuda: sm_90 only
+  tests/test_motif3_resident: sm_90 only
+  tests/test_motif3_long_sm90: sm_90 only
+  final d878ea1 tests/test_motif3_long (25-token tail fix): sm_90 only
+
+Fresh final-revision fixture rerun:
+  Motif-3 official-final topology: valid
+    53 target layers; 14 full + 39 SWA; 384E top-8; MTP present
+  Motif-3 official fixtures: valid
+    router; expert PolyNorm; mHC; expanded GDLA
+  Motif-3 tokenizer/chat parity: valid
+    16 raw + 5 rendered official-final fixtures
+  Motif-3 H200 CUDA fixtures: valid
+    BF16; router; PolyNorm; mHC; expanded/latent GDLA
+  ds4 server unit suite: passed
+
+The resident regression executed twice on this same native-sm90 build,
+including a final revision repeat after the 64K gate. It copied the complete
+model without SSD streaming or CPU weight offload, released the source tensor
+pages, exercised sparse and expanded/latent graphs plus the 256K latent-cache
+allocation, and passed the post-inference source-mapping RSS ceiling. The
+higher repeat measured 91.26171875 GiB model/runtime and 95.298828125 GiB
+including the 256K session; see H200-RESIDENT-SM90.txt.

@@ -1,0 +1,32 @@
+Motif-3 MQ87-88-FIT local release-shard re-verification
+========================================================
+
+Completed: 2026-08-13 21:17 UTC
+Manifest:
+  publish/mixed/MQ87-88-FIT-SHA256SUMS
+Directory:
+  /motif3/artifacts/Motif-3-MQ87-FIT-shards
+Command:
+  sha256sum -c publish/mixed/MQ87-88-FIT-SHA256SUMS
+
+Result:
+  Motif-3-MQ87-88-FIT-00001-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00002-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00003-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00004-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00005-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00006-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00007-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00008-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00009-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00010-of-00011.gguf: OK
+  Motif-3-MQ87-88-FIT-00011-of-00011.gguf: OK
+
+All eleven local handoff inputs match the immutable public manifest. The
+handoff packager independently re-hashes the same files before accepting a
+package and does not copy the public shards into the private bucket.
+
+The merged/unsharded runtime input was independently re-hashed during active
+H200 validation:
+  bytes: 94,162,541,472
+  SHA-256: 15755a735753bc1396e5ffa539e65a779a4fd769e8833360a4d743c4c60c2f25

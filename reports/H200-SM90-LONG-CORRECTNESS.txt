@@ -1,0 +1,24 @@
+Final native-sm90 deterministic long-context correctness
+=========================================================
+
+Host: Runpod 4x NVIDIA H200, one isolated process per device
+Runtime revision: fa3f24f84f52fc91a0769b2eca021c95b422746e
+Final handoff note: d878ea1 affects only decode-reservation trimming at native
+context; the 32K/64K/128K prompts in this file do not enter that branch.
+Binary: tests/test_motif3_long_sm90
+Build: all linked CUDA code objects verified as sm_90 by cuobjdump
+Live executable SHA-256:
+  3a7f6a9473243c0e04c3bd03bb3119d82c042ed43a29ec95ed8bc5ef23171cc3
+Artifact: /motif3/artifacts/Motif-3-MQ87-FIT.gguf
+
+32K gate (completed before this consolidated log):
+Motif-3 long gate: source=32768 prompt=32768 ctx=32832 prefill=125.34 tok/s decode=1.942 tok/s generated=43 evals=43 finite=1 retrieval=1
+Motif-3 long output: ["MOTIF-32768-BEGIN-7Q2K", "MOTIF-32768-MIDDLE-9R4V", "MOTIF-32768-END-3X8P"]
+
+64K gate (completed 2026-08-13 20:33 UTC):
+Motif-3 long gate: source=65536 prompt=65536 ctx=65600 prefill=68.72 tok/s decode=1.021 tok/s generated=52 evals=52 finite=1 retrieval=1
+Motif-3 long output: ["MOTIF-65536-BEGIN-7Q2K","MOTIF-65536-MIDDLE-9R4V","MOTIF-65536-END-3X8P"]
+
+128K gate (completed 2026-08-13 21:17 UTC):
+Motif-3 long gate: source=131072 prompt=131072 ctx=131136 prefill=36.36 tok/s decode=0.524 tok/s generated=49 evals=49 finite=1 retrieval=1
+Motif-3 long output: ["MOTIF-131072-BEGIN-7Q2K","MOTIF-131072-MIDDLE-9R4V","MOTIF-131072-END-3X8P"]

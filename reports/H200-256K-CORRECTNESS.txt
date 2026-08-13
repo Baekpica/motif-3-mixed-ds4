@@ -1,0 +1,64 @@
+Motif-3 MQ87-88-FIT native 256K H200 correctness run
+====================================================
+
+Scope: H200 correctness bring-up, not a DGX Spark or release-speed claim.
+Start: 2026-08-14 03:12:37 KST (2026-08-13 18:12:37 UTC)
+GPU: physical H200 device 3
+Live executable SHA-256:
+  037c7750800ea52a332f9c569f7eab7e3b8cacf71ead974969972da77cb56150
+Live DS4/CUDA environment audit:
+  CUDA_VISIBLE_DEVICES=3
+  DS4_LOCK_FILE=/tmp/ds4-motif3-256k.lock
+  no SSD-streaming, weight-cache, no-copy, direct-model, or preload override
+Command:
+  ./tests/test_motif3_long \
+    /motif3/artifacts/Motif-3-MQ87-FIT.gguf \
+    /motif3/handoff-fixtures/long-context/context-262144.tokens.npy
+
+The live binary reserves 64 native-context positions for decode, so the
+admitted prompt is 262,080 tokens and the context remains 262,144. Post-start
+fixture audit found that this binary retained a 20-token tail while the full
+question plus generation prefix is 25 tokens. It therefore omits the leading
+five tokens `QUESTION: Return only a` but retains the unambiguous instruction
+`JSON array of the exact three RECORD codes in document order, with no
+explanation.` This exact behavior is disclosed with the result.
+
+Final handoff revision `d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`
+corrects the constant to 25 and preserves the complete question. The added
+`context-262144-server` fixture is independently re-tokenized to exactly
+262,080 tokens, retains all 25 tail tokens and all three records, and is the
+authoritative OpenAI target-host gate. The running process was not interrupted
+or relabeled as that corrected gate.
+
+Selected observed progress checkpoints:
+  155648/262080 (59.4%), 30.97 tok/s, 5025.0 s
+  163840/262080 (62.5%), 29.51 tok/s, 5552.5 s
+  172032/262080 (65.6%), 28.17 tok/s, 6106.5 s
+  180224/262080 (68.8%), 26.95 tok/s, 6686.8 s
+  188416/262080 (71.9%), 25.83 tok/s, 7293.4 s
+  196608/262080 (75.0%), 24.80 tok/s, 7926.2 s
+  204800/262080 (78.1%), 23.86 tok/s, 8585.1 s
+  212992/262080 (81.3%), 22.98 tok/s, 9270.5 s
+  221184/262080 (84.4%), 22.16 tok/s, 9981.8 s
+  229376/262080 (87.5%), 21.40 tok/s, 10719.4 s
+  237568/262080 (90.6%), 20.69 tok/s, 11483.6 s
+  245760/262080 (93.8%), 20.02 tok/s, 12274.2 s
+  PENDING_LATER_CHECKPOINTS
+
+Final process output:
+  PENDING_256_RESULT
+
+Code-generation note:
+  This isolated process started before the final explicit all-sm_90 rebuild.
+  It executes the unchanged native source graph on H200 through the CUDA
+  toolkit-compatible default code object, with MMQ objects already sm_90.
+  Its rates are not native-sm_90 performance claims. Separately, the final
+  overlay has every CUDA code object verified as sm_90 by cuobjdump, passes the
+  complete resident graph/cache regression, and passes the exact 32K long gate
+  (125.34 tok/s prefill, 1.942 tok/s decode, retrieval=1).
+
+  The live executable remained accessible at /proc/106638/exe after the final
+  files were relinked. cuobjdump records its generic ds4 control/graph objects
+  as sm_75 and its GGML/MMQ/repack objects as sm_90. This is disclosed to keep
+  the 256K result a correctness bring-up datum rather than a native-sm_90
+  performance claim. Separate final binaries contain sm_90 code objects only.

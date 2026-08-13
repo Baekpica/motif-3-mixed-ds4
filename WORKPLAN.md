@@ -14,16 +14,20 @@
    uncovered 51×384 sparse layer/expert cells.
 7. **Complete** — Generate, strictly verify, split, and publicly upload the
    immutable 87.6957 GiB MQ87-88-FIT artifact.
-8. **Complete** — Add native `motif3` loading and execution to the local
-   `Baekpica/ds4:feature/motif-3-model-loader` state: dense/shared/routed MoE,
-   PolyNorm, mHC, GDLA, tokenizer/tools, MTP, and OpenAI server.
+8. **Complete** — Publish native `motif3` loading and execution at
+   `Baekpica/ds4:feature/motif-3-model-loader@d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`:
+   dense/shared/routed MoE, PolyNorm, mHC, GDLA, tokenizer/tools, MTP, and the
+   OpenAI server.
 9. **Complete** — Match the expanded official GDLA path at short context and
    implement production latent KV plus RoPE key and bounded SWA-ring state.
 10. **Complete** — Pass H200 structural, numerical, resident-memory, API,
-    tool, continuous-batching, short, 32K, 64K, and 128K gates.
-11. **Running** — Complete the isolated immutable 256K H200 prefill/decode
-    gate, then finalize the public Q8/Mixed reports and checksum-complete
-    private Spark handoff bucket.
+    tool, continuous-batching, short, 32K, 64K, and 128K gates; explicitly
+    rebuild and audit all final runtime code objects as `sm_90`, then repeat
+    the resident and exact 32K gates.
+11. **Running** — Complete the final all-`sm_90`, full-question 256K H200
+    prefill/decode gate, then finalize the public Q8/Mixed reports and
+    checksum-complete private Spark handoff bucket. The earlier legacy-tail
+    process remains separately disclosed rather than substituted for it.
 12. **Target-host handoff** — On one GB10, rebuild for `sm_121a` and validate
     resident 32K/64K/128K/256K prefill/decode, OpenAI-compatible serving, and
     physical unified-memory/OS headroom.

@@ -1,0 +1,42 @@
+DGX Spark sm_121a clean CUDA-architecture cross-build audit
+============================================================
+
+Final-revision repeat completion: 2026-08-13 21:00 UTC
+Build host: Runpod H200 development host (compile/link only)
+Host CPU architecture: x86_64
+Clean clone: /workspace/ds4-sm121-build
+Runtime revision: d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9
+Command: make -j32 cuda-spark
+NVCC architecture: -gencode arch=compute_121a,code=sm_121a
+CUDA feature define: DS4_CUDA_HAVE_MXF4=1
+
+Successfully compiled and linked:
+  ds4
+  ds4-server
+  ds4-bench
+  ds4-eval
+  ds4-agent
+  tests/test_motif3_cuda
+  tests/test_motif3_resident
+  tests/test_motif3_long
+
+cuobjdump architecture audit:
+  ds4: sm_121a only
+  ds4-server: sm_121a only
+  ds4-bench: sm_121a only
+  ds4-eval: sm_121a only
+  ds4-agent: sm_121a only
+  tests/test_motif3_cuda: sm_121a only
+  tests/test_motif3_resident: sm_121a only
+  tests/test_motif3_long: sm_121a only
+
+Architecture-independent fixture checks in the same clean clone:
+  topology/binder: passed (53 layers, 14 full + 39 SWA, 384E top-8, MTP)
+  official router/PolyNorm/mHC/expanded-GDLA fixtures: passed
+  tokenizer/chat parity: passed (16 raw + 5 rendered)
+
+Scope: PASSED as a CUDA-architecture compile/link/code-object handoff gate
+only. The host-side objects are x86_64, not the GB10 host build. These Blackwell
+code objects cannot be executed on H200 and do not prove GB10 correctness,
+performance, unified-memory residency, or 256K serving. The private handoff
+requires rebuilding and running the same pinned source on the target Spark.

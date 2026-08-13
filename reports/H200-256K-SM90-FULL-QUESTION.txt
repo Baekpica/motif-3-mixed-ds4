@@ -1,0 +1,60 @@
+Motif-3 MQ87-88-FIT corrected full-question 256K H200 gate
+================================================================
+
+Scope: authoritative H200 native correctness gate for the decode-reserved
+262,144-token context. This is not a DGX Spark performance or residency claim.
+
+Start: 2026-08-14 06:06:46 KST (2026-08-13 21:06:46 UTC)
+GPU: physical H200 device 0
+Runtime revision:
+  d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9
+Live executable SHA-256:
+  3a7f6a9473243c0e04c3bd03bb3119d82c042ed43a29ec95ed8bc5ef23171cc3
+Live executable CUDA code objects:
+  sm_90 only
+Environment:
+  CUDA_VISIBLE_DEVICES=0
+  DS4_LOCK_FILE=/tmp/ds4-motif3-256k-sm90-full-question.lock
+  no SSD streaming, CPU weight offload, distributed placement, or weight cache
+
+Command:
+  ./tests/test_motif3_long_sm90 \
+    /motif3/artifacts/Motif-3-MQ87-FIT.gguf \
+    /motif3/handoff-fixtures/long-context/context-262144-server.tokens.npy
+
+Authoritative input:
+  rendered prompt tokens: 262,080
+  admitted native context: 262,144
+  decode reservation: 64
+  complete 25-token question/generation tail: preserved
+  token-array SHA-256:
+    164876598bca99eb4edf2bbe6f330abac5ff82893efee5781846ef678463e794
+  rendered-text SHA-256:
+    879a5ef76e0925d249697375185736539aafec49c2ae9fe85b138ac86ba66bf2
+  expected-answer SHA-256:
+    5b11b5689df7101b995e4a19b2ddf55b76a7cebacb5d0c8e59893a8724c380ea
+
+Startup residency observations:
+  resident model tensor image: 87.69 GiB
+  source GGUF tensor pages released after device copy: yes
+  resident latent KV allocation: 4,245,599,232 bytes (3.954 GiB)
+  live-prefill GGUF mapping RSS: 9,416 KiB
+  live-prefill process VmSwap: 0 KiB
+  live-prefill physical-GPU allocation: 98,471 MiB
+
+Selected progress checkpoints:
+  8192/262080 (3.1%), 304.81 tok/s, 26.9 s
+  16384/262080 (6.3%), 219.29 tok/s, 74.7 s
+  24576/262080 (9.4%), 162.60 tok/s, 151.1 s
+  32768/262080 (12.5%), 126.34 tok/s, 259.4 s
+  40960/262080 (15.6%), 104.16 tok/s, 393.2 s
+  49152/262080 (18.8%), 88.86 tok/s, 553.1 s
+  57344/262080 (21.9%), 77.59 tok/s, 739.1 s
+  65536/262080 (25.0%), 68.88 tok/s, 951.4 s
+  73728/262080 (28.1%), 61.97 tok/s, 1189.7 s
+  81920/262080 (31.3%), 56.33 tok/s, 1454.2 s
+  90112/262080 (34.4%), 51.64 tok/s, 1745.1 s
+  PENDING_LATER_CHECKPOINTS
+
+Final process output:
+  PENDING_256_SM90_FULL_QUESTION_RESULT

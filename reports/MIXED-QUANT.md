@@ -36,6 +36,7 @@ promotion in this MQ87-88 release.
 | Split aggregate bytes | 94,162,542,816 |
 | Split aggregate GiB | 87.69570181 |
 | Tensor payload bytes | 94,152,882,712 |
+| Unsharded SHA-256 | `15755a735753bc1396e5ffa539e65a779a4fd769e8833360a4d743c4c60c2f25` |
 | Tensors | 2,287 |
 | F32 | 1,273 |
 | BF16 | 318 |
@@ -87,11 +88,12 @@ layers, 384E top-8 routing, shared experts, and complete MTP weights.
 ## Native H200 execution evidence
 
 The final explicitly rebuilt `sm_90` CUDA path copied the complete 87.70 GiB
-image into one H200 in 9.560 seconds. Strict Motif residency rejects a failed device copy
-rather than continuing through a host-mapped/no-copy path. The dedicated gate
-measured a `97,438,334,976`-byte CUDA free-memory delta for model and runtime
-initialization. No SSD streaming, CPU weight offload, or multi-tier expert
-cache was enabled.
+image into one H200 in two strict repeats. Copy time was 9.560–12.070 seconds;
+the model/runtime CUDA free-memory delta was 97,438,334,976–97,991,524,352
+bytes (90.747–91.262 GiB). Capacity accounting uses the higher repeat. Strict
+Motif residency rejects a failed device copy rather than continuing through a
+host-mapped/no-copy path. No SSD streaming, CPU weight offload, or multi-tier
+expert cache was enabled.
 
 The production Motif session stores normalized latent KV and rotated RoPE keys
 for the 14 full-attention layers and bounded SWA rings for the remaining

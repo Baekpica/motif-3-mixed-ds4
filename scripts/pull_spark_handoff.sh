@@ -56,6 +56,13 @@ if [[ -n $MERGED_MODEL ]]; then
     }
     mkdir -p -- "$(dirname -- "$MERGED_MODEL")"
     "$GGUF_SPLITTER" --merge "$MODEL_DIR/${filenames[0]}" "$MERGED_MODEL"
+    merged_bytes=$(<"$HANDOFF_DIR/model/merged-bytes.txt")
+    merged_sha256=$(<"$HANDOFF_DIR/model/merged-sha256.txt")
+    [[ $(stat -c %s -- "$MERGED_MODEL") == "$merged_bytes" ]] || {
+        echo "merged GGUF byte count mismatch" >&2
+        exit 1
+    }
+    printf '%s  %s\n' "$merged_sha256" "$MERGED_MODEL" | sha256sum --check -
     printf 'merged model: %s (%s bytes)\n' \
         "$MERGED_MODEL" "$(stat -c %s "$MERGED_MODEL")"
 fi

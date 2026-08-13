@@ -15,7 +15,7 @@
 - ds4 branch: `feature/motif-3-model-loader`
 - ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
 - ds4 Motif implementation commit:
-  `bbce7eecf54703ae315328d4e240531c5a9f1a22`
+  `d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`
 - Source model revision:
   `Motif-Technologies/Motif-3@ccceb1a5fd7b5eb32e47841216b3caf5666c07bc`
 
@@ -53,9 +53,14 @@ build log must show `sm_121a`; do not reuse an H200 `sm_90` binary or object.
 Before serving, confirm that raw GGUF mappings and any aligned/repacked
 artifact are not simultaneously physically resident.
 
+The H200 handoff stage already completed a clean compile/link-only rehearsal
+of this exact revision: all five runtime programs and the Motif CUDA,
+resident, and long-test binaries contained only `sm_121a` code objects. That
+does not replace this clean rebuild or any execution gate on the actual GB10.
+
 ```bash
 DS4_DIR=/workspace/motif-3-ds4
-DS4_REV=bbce7eecf54703ae315328d4e240531c5a9f1a22
+DS4_REV=d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9
 git clone --branch feature/motif-3-model-loader \
   https://github.com/Baekpica/ds4.git "$DS4_DIR"
 git -C "$DS4_DIR" checkout --detach "$DS4_REV"
@@ -86,10 +91,16 @@ make -C "$DS4_DIR" \
   "$HANDOFF_DIR/fixtures/official-final"
 "$DS4_DIR/tests/test_motif3_resident" "$MERGED_MODEL"
 
-for TOKENS in 32768 65536 131072 262144; do
+for TOKENS in 32768 65536 131072; do
   "$DS4_DIR/tests/test_motif3_long" "$MERGED_MODEL" \
     "$HANDOFF_DIR/fixtures/long-context/context-${TOKENS}.tokens.npy"
 done
+
+# The authoritative decode-reserved 256K input is already exactly 262,080
+# tokens and preserves the complete question. test_motif3_long admits 64
+# additional decode positions, yielding the native 262,144-token context.
+"$DS4_DIR/tests/test_motif3_long" "$MERGED_MODEL" \
+  "$HANDOFF_DIR/fixtures/long-context/context-262144-server.tokens.npy"
 ```
 
 For the release server, deliberately omit both `--ssd-streaming` and
@@ -99,7 +110,41 @@ For the release server, deliberately omit both `--ssd-streaming` and
 CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   --cuda --model "$MERGED_MODEL" --ctx 262144 \
   --prefill-chunk 256 --batched-session 1 --tokens 64 \
-  --host 127.0.0.1 --port 8000
+  --host 127.0.0.1 --port 8000 2>&1 | \
+  tee "$HANDOFF_DIR/reports/spark-server.log"
+```
+
+In another shell, send the decode-reserved API fixture. It retains the full
+25-token question/generation tail and all three records while removing exactly
+64 one-token filler repetitions, so the official rendered prompt is 262,080
+tokens inside the native 262,144-token admission. The validator requires the
+exact model ID, API token accounting, JSON array, record order, stop reason,
+and non-empty decode.
+
+```bash
+python3 "$HANDOFF_DIR/reproduction/scripts/run_openai_long_gate.py" \
+  --text "$HANDOFF_DIR/fixtures/long-context/context-262144-server.txt" \
+  --answer "$HANDOFF_DIR/fixtures/long-context/context-262144-server.answer.json" \
+  --output "$HANDOFF_DIR/reports/spark-openai-256k-result.json"
+```
+
+Capture the same process once after startup and again immediately after the
+256K request has completed prefill and decode. The server log preserves the
+prefill/decode timing and allocator diagnostics. The post-decode capture is
+the release measurement; it must retain at least 8 GiB `MemAvailable`, show
+process `VmSwap: 0`, and keep the GGUF mapping RSS small after the CUDA-owned
+image is prepared.
+
+```bash
+SERVER_PID=$(pgrep -n -x ds4-server)
+"$HANDOFF_DIR/reproduction/scripts/capture_spark_memory.sh" \
+  "$SERVER_PID" "$MERGED_MODEL" \
+  "$HANDOFF_DIR/reports/spark-memory-startup.txt"
+
+# Run the strict OpenAI request above, then capture the still-resident server.
+"$HANDOFF_DIR/reproduction/scripts/capture_spark_memory.sh" \
+  "$SERVER_PID" "$MERGED_MODEL" \
+  "$HANDOFF_DIR/reports/spark-memory-post-decode.txt"
 ```
 
 ## What the H200 stage established
@@ -117,8 +162,8 @@ CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   token arrays and include beginning/middle/end retrieval answers.
 - The `sm_90` ds4 CLI/server build completed and a strict full-image copy made
   the 87.70 GiB mixed GGUF resident on one H200 without SSD streaming or CPU
-  weight offload; the final native-`sm_90` CUDA free-memory delta was
-  97,438,334,976 bytes.
+  weight offload; two native-`sm_90` repeats measured 97,438,334,976–
+  97,991,524,352 bytes, and capacity accounting uses the higher result.
 - The native Motif graph now owns GDLA, mHC, PolyNorm, dense/shared/routed MoE,
   latent cache, official chat/tool semantics, and the MTP weight path. It never
   falls through to the generic DeepSeek graph.
@@ -127,7 +172,7 @@ CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   (4.037 GiB) with the model still resident.
 - After resident CUDA preparation, the raw GGUF tensor mapping is explicitly
   discarded. H200 `/proc` evidence reduced that mapping from 91,955,608 kB RSS
-  to 9,416 kB after copy and 29,640 kB after the final native-`sm_90`
+  to 9,416 kB after copy and 29,512 kB after the latest native-`sm_90`
   resident regression.
   Recheck this behavior and final `MemAvailable` on GB10; do not set
   `DS4_CUDA_KEEP_MODEL_PAGES` for the capacity run.
@@ -138,10 +183,11 @@ CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
 
 See `reports/H200-DEVELOPMENT.md` and `reports/MIXED-QUANT.md` for exact
 artifact and numerical records. H200 results are development evidence only.
-The 128K/256K numerical processes began before the host source-page discard
-fix; the final overlay separately passed the complete resident graph/cache
-regression. The Spark gate must combine both properties in one target-host
-server run.
+One separately disclosed legacy-trim 256K process began before the host
+source-page discard fix. The final all-`sm_90` overlay passed the resident
+graph/cache regression and exact 32K/64K/128K gates, and its corrected
+full-question 256K gate is the authoritative H200 row. The Spark gate must
+still combine these properties in one target-host OpenAI server run.
 
 ## Initial capacity projection
 
@@ -151,10 +197,10 @@ unified-memory overhead and runtime pools remain target-host measurements:
 | Pool | Projected size |
 |---|---:|
 | Public split GGUF aggregate | 87.69570 GiB |
-| H200 resident model/runtime initialization delta | 97,438,334,976 bytes (90.746520996094 GiB) measured on native `sm_90` build |
+| H200 resident model/runtime initialization delta | 97,991,524,352 bytes (91.26171875 GiB), conservative higher of two native-`sm_90` repeats |
 | Latent KV + RoPE key + bounded SWA ring payload at 262,144 | 4,236,751,872 bytes (3.946 GiB) measured |
 | H200 CUDA allocation delta for that session | 4,334,813,184 bytes (4.037 GiB) measured |
-| H200 combined model/runtime + 256K-session delta | 101,773,148,160 bytes (94.783630371094 GiB) measured |
+| H200 combined model/runtime + 256K-session delta | 102,326,337,536 bytes (95.298828125 GiB), using the higher resident repeat |
 | Steady CUDA workspace budget | up to 6 GiB |
 | Server/session budget | up to 3 GiB |
 | Required final `MemAvailable` | at least 8 GiB |

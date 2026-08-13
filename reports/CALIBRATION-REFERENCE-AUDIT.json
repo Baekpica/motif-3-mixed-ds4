@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "audited_at_utc": "2026-08-13T20:49:00Z",
+  "reference_bucket": "hf://buckets/Baekpica/solar-open2-spark-handoff",
+  "reference_bucket_private": true,
+  "reference_file": "calibration/calibration.composition.json",
+  "same_seed": true,
+  "same_requested_tokens": true,
+  "same_reference_dataset": true,
+  "same_reference_revision": true,
+  "same_normalizer_sha256": true,
+  "same_bucket_count": true,
+  "same_bucket_specs": true,
+  "matched_fields_per_bucket": [
+    "bucket",
+    "share",
+    "repo",
+    "revision",
+    "files",
+    "target_tokens"
+  ],
+  "reference_dataset": {
+    "repo": "Baekpica/Solar-Open2-120B-A15B-REAM-148E-Healing-Mix",
+    "revision": "1931f3a40cc3463217f9c7d25906f80ded029264",
+    "normalizer_sha256": "677274f0d6a93326aa3d76e99e0d251d499317fa455dfb7eefed8fbc93ad1b93"
+  },
+  "target_shares": {
+    "if_chat": 0.22,
+    "cascade1_reasoning": 0.16,
+    "cascade2_reasoning": 0.16,
+    "ko": 0.16,
+    "multilingual_other": 0.12,
+    "finance": 0.06,
+    "swe_agentic": 0.06,
+    "code_algo": 0.06
+  },
+  "solar_render": {
+    "documents": 1641,
+    "actual_tokens": 4056882,
+    "bytes": 15401547
+  },
+  "motif_rerender": {
+    "documents": 1539,
+    "actual_tokens": 4079555,
+    "bytes": 17011959,
+    "sha256": "1a213224c444ed4cf39cdb36ecd41c71a5e6d8af568266f92c880d418d74f438",
+    "tokenizer": "official final Motif-3",
+    "template": "official final Motif-3"
+  },
+  "result": "passed"
+}

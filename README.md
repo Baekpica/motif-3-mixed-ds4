@@ -22,14 +22,15 @@ or distilled.
 | Real Q8 activation calibration | 302,080 tokens, 123,248,640 routed observations, zero missing cells across 51×384 layer/experts |
 | MQ87-88-FIT | 94,162,541,472-byte unsharded GGUF; 87.6957 GiB; 11 public shards; all 2,287 tensors verified |
 | Native ds4 H200 execution | Router/shared/dense/PolyNorm/mHC/GDLA/latent KV/MTP/tokenizer/tools/OpenAI server implemented and exercised |
-| Context correctness | 2K, 32K, 64K, and 128K passed; the isolated 256K gate is active |
+| Context correctness | 2K, 32K, 64K, and 128K passed; an all-`sm_90` full-question 256K gate is active |
 | Target DGX Spark | Deliberately pending; exact code, fixtures, model hashes, and expensive calibration state are in the private handoff |
 
 `87-88 GiB` is a nominal capacity class, not a cosmetic hard cutoff. This
 artifact was accepted at its measured 87.6957 GiB without another
 precision-reducing pass. On the final native-`sm_90` H200 build, the resident
-model/runtime plus a 262,144-token latent-cache session produced a combined
-94.783630371094 GiB CUDA allocation delta. Actual GB10 unified-memory residency and OS headroom remain
+model/runtime plus a 262,144-token latent-cache session produced a conservative
+95.298828125 GiB CUDA allocation delta on the higher of two resident repeats.
+Actual GB10 unified-memory residency and OS headroom remain
 target-host measurements.
 
 ## Pinned inputs
@@ -40,7 +41,7 @@ target-host measurements.
 - llama.cpp conversion base: `1d2869c6e54d5003f3927a79efbca0fefa034a6d`
 - Baekpica/ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
 - Baekpica/ds4 Motif implementation:
-  `feature/motif-3-model-loader@bbce7eecf54703ae315328d4e240531c5a9f1a22`
+  `feature/motif-3-model-loader@d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`
 - Mixed-weight revision: `efd6044e25e7f8e3b459a737d021091e2e69b6c6`
 - Q8 reference revision: `5c266c95bf8c8d822d50e5e1cce9d108eaadb2af`
 
@@ -56,7 +57,8 @@ input, or fallback.
   public tree includes composition but not redistributed corpus text
 - `fixtures/official-final/`: official-equation router, PolyNorm, mHC, GDLA,
   tokenizer, and chat fixtures
-- `fixtures/long-context/`: exact deterministic 32K/64K/128K/256K inputs
+- `fixtures/long-context/`: exact deterministic 32K/64K/128K/256K native
+  inputs and a 262,080-token decode-reserved 256K OpenAI fixture
   published with the final H200 bundle
 - Native runtime: public
   [`Baekpica/ds4:feature/motif-3-model-loader`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader)
@@ -70,6 +72,14 @@ all four rank-local accumulators, checksum manifest, and Spark pull script.
 The public GGUF shards are referenced by immutable revision and SHA-256 rather
 than duplicated in that bucket.
 
+The publication-role guard verifies that these remain two public HF model
+repositories, one public GitHub reproduction, one public ds4 branch, and one
+private bucket—and that no HF model repository is created for the reproduction:
+
+```bash
+bash scripts/audit_publication_layout.sh
+```
+
 ## Audit and reproduce
 
 Use Python 3.11 or newer. Lightweight manifest/fixture tests run with:
@@ -78,6 +88,9 @@ Use Python 3.11 or newer. Lightweight manifest/fixture tests run with:
 python3 -m pip install -e '.[test]'
 pytest -q
 ```
+
+Regenerating official tokenizer or long-context fixtures additionally needs
+the reference dependencies: `python3 -m pip install -e '.[reference]'`.
 
 The H200 build used `/motif3` on Runpod's faster root-backed volume for source
 weights, GGUFs, imatrix state, and temporary conversion I/O. `scripts/env.sh`
@@ -92,6 +105,11 @@ bash scripts/fetch_tensor_headers.sh
 bash scripts/build_inventory.sh
 bash scripts/build_reference_fixtures.sh
 bash scripts/build_tokenizer_fixtures.sh
+python3 fixtures/build_server_decode_fixture.py \
+  --tokenizer /motif3/source-final \
+  --source-text fixtures/long-context/context-262144.txt \
+  --source-answer fixtures/long-context/context-262144.answer.json \
+  --out fixtures/long-context
 ```
 
 Q8 conversion, activation collection, mixed quantization, split, and

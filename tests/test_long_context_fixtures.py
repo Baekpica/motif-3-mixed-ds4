@@ -52,3 +52,36 @@ def test_long_context_answers_lock_begin_middle_and_end_codes() -> None:
             f"MOTIF-{tag}-MIDDLE-9R4V",
             f"MOTIF-{tag}-END-3X8P",
         ]
+
+
+def test_256k_server_fixture_reserves_decode_without_trimming_question() -> None:
+    manifest = json.loads((FIXTURES / "server-manifest.json").read_text())
+    assert manifest["source_fixture"] == "context-262144.txt"
+    assert manifest["prompt_tokens"] == 262080
+    assert manifest["admitted_context"] == 262144
+    assert manifest["decode_reserve"] == 64
+    for kind in ("tokens", "text", "answer"):
+        path = FIXTURES / manifest[kind]
+        assert path.is_file()
+        assert _sha256(path) == manifest[f"{kind}_sha256"]
+
+    source = np.load(FIXTURES / "context-262144.tokens.npy")
+    server = np.load(FIXTURES / manifest["tokens"])
+    question_and_generation_tail = 25
+    reserve = manifest["decode_reserve"]
+    expected = np.concatenate(
+        (
+            source[: -question_and_generation_tail - reserve],
+            source[-question_and_generation_tail:],
+        )
+    )
+    assert server.dtype == np.dtype("int32")
+    assert server.shape == (262080,)
+    assert np.array_equal(server, expected)
+
+    answer = json.loads((FIXTURES / manifest["answer"]).read_text())
+    assert answer["expected_json"] == [
+        "MOTIF-262144-BEGIN-7Q2K",
+        "MOTIF-262144-MIDDLE-9R4V",
+        "MOTIF-262144-END-3X8P",
+    ]

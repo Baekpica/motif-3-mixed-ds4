@@ -1,0 +1,22 @@
+Spark handoff packaging guard audit
+===================================
+
+Audit time: 2026-08-13 20:52 UTC
+
+Guard 1 — wrong repository role:
+  supplied model repo: Baekpica/motif-3-mixed-ds4
+  exit: 1
+  output: --model-repo must be Baekpica/Motif-3-Mixed-Quant-GGUF
+  output directory created: no
+
+Guard 2 — uncommitted reproduction state:
+  supplied model repo/revisions: correct immutable values
+  reproduction tree: deliberately dirty during final report preparation
+  exit: 1
+  output: refusing to package a reproduction tree with uncommitted changes
+  output directory created: no
+
+The final packaging run additionally requires exact 40-character Q8, mixed,
+ds4-base, and ds4-head SHAs; clean tracked ds4 state; exact ds4 HEAD; exactly
+11 local mixed shards; and byte-for-byte equality between their freshly
+computed SHA-256 list and the fixed public release manifest.

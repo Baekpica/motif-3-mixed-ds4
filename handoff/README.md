@@ -13,14 +13,17 @@ private bucket.
 
 - Public model: `Baekpica/Motif-3-Mixed-Quant-GGUF`
 - Native runtime: `Baekpica/ds4:feature/motif-3-model-loader` at
-  `bbce7eecf54703ae315328d4e240531c5a9f1a22`
+  `d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`
 - Exact public revision: `model/revision.txt`
 - Mixed shard filenames and hashes: `model/filenames.txt` and
   `model/sha256.txt`
+- Canonical merged byte count/hash: `model/merged-bytes.txt` and
+  `model/merged-sha256.txt`
 - Q8-derived imatrix: `calibration/Motif-3-Q8_0-imatrix.dat`
 - Rank-local imatrix accumulators: `calibration/partials/`
 - Official-final numerical fixtures: `fixtures/official-final/`
-- Exact 32K/64K/128K/256K inputs: `fixtures/long-context/`
+- Exact 32K/64K/128K/256K native inputs plus the 262,080-token
+  decode-reserved OpenAI fixture: `fixtures/long-context/`
 - ds4 commit metadata, patch audit, and complete Motif-touched source snapshot:
   `ds4/`
 - Converter, calibration, fixture, verification, quantization, split, and

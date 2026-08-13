@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "source_fixture": "context-262144.txt",
+  "source_answer": "context-262144.answer.json",
+  "derivation": "remove final one-token ' x' filler only",
+  "text": "context-262144-server.txt",
+  "tokens": "context-262144-server.tokens.npy",
+  "answer": "context-262144-server.answer.json",
+  "text_sha256": "879a5ef76e0925d249697375185736539aafec49c2ae9fe85b138ac86ba66bf2",
+  "tokens_sha256": "164876598bca99eb4edf2bbe6f330abac5ff82893efee5781846ef678463e794",
+  "answer_sha256": "5b11b5689df7101b995e4a19b2ddf55b76a7cebacb5d0c8e59893a8724c380ea",
+  "prompt_tokens": 262080,
+  "admitted_context": 262144,
+  "decode_reserve": 64
+}

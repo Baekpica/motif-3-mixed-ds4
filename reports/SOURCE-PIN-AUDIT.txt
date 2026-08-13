@@ -1,0 +1,21 @@
+Official-final source pin audit
+===============================
+
+Audit time: 2026-08-13 20:37 UTC
+Repository: Motif-Technologies/Motif-3
+Revision: ccceb1a5fd7b5eb32e47841216b3caf5666c07bc
+Policy: official-final-only; Motif-3-Beta absent from the local source/runtime trees
+Beta-named paths found under source/reproduction/runtime audit roots: 0
+
+SHA-256 revalidated against manifests/source.json:
+30f14b635d3258a18c3ff7e69829f8fbfa775e87477ffabb59a79115bba820a5  config.json
+cd6ee031056f20293d9cc2dc17dafc56479c27e62eac81d88c0d5aede42614d5  configuration_motif.py
+de9c73fd82712da3d7cb0951b8c1e2ad0f02fda5370fe2fb95ae5383a65c3b00  modeling_motif.py
+956d8a693e0ede5283c803aba3fe1d4b46b202d9faac007f947c6f5b61ce7864  tokenizer.json
+9cf7345dbacf8514c9ef790f39ed1fdd9b18083af33ece279b4fd913af57fd56  tokenizer_config.json
+998a066fd57a07187040a896e7fc455b2aa21dd490d156e82b63518be0a49297  chat_template.jinja
+1203729594a071794ef9ea65b6b95418a30af92238d4cb92e6eb5bc4461a0f69  generation_config.json
+65fec2d8211efe0688fa7f61516cec3a568c43389e5a6c91d86f8ea1ac9d4afb  model.safetensors.index.json
+
+Pinned index inventory: 155 shards, 2,236 tensors, 314,841,775,750
+parameters, 629,683,551,500 safetensors payload bytes.

@@ -15,17 +15,20 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_MIXED_REPO = "Baekpica/Motif-3-Mixed-Quant-GGUF"
 EXPECTED_MIXED_WEIGHT_REVISION = "efd6044e25e7f8e3b459a737d021091e2e69b6c6"
 EXPECTED_Q8_WEIGHT_REVISION = "5c266c95bf8c8d822d50e5e1cce9d108eaadb2af"
+EXPECTED_MERGED_BYTES = 94_162_541_472
+EXPECTED_MERGED_SHA256 = (
+    "15755a735753bc1396e5ffa539e65a779a4fd769e8833360a4d743c4c60c2f25"
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--model-dir", type=Path, required=True)
-    parser.add_argument(
-        "--model-repo", default="Baekpica/Motif-3-Mixed-Quant-GGUF"
-    )
+    parser.add_argument("--model-repo", default=EXPECTED_MIXED_REPO)
     parser.add_argument("--model-revision", required=True)
     parser.add_argument("--q8-revision", required=True)
     parser.add_argument(
@@ -55,7 +58,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--ds4-revision",
-        default="bbce7eecf54703ae315328d4e240531c5a9f1a22",
+        default="d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9",
     )
     return parser.parse_args()
 
@@ -119,6 +122,8 @@ def main() -> int:
             "--model-revision must be the immutable mixed-weight revision "
             + EXPECTED_MIXED_WEIGHT_REVISION
         )
+    if args.model_repo != EXPECTED_MIXED_REPO:
+        raise SystemExit("--model-repo must be " + EXPECTED_MIXED_REPO)
     if args.q8_revision != EXPECTED_Q8_WEIGHT_REVISION:
         raise SystemExit(
             "--q8-revision must be the immutable Q8-weight revision "
@@ -132,7 +137,7 @@ def main() -> int:
     reproduction_status = git_output(ROOT, "status", "--short")
     if reproduction_status:
         raise SystemExit(
-            "refusing to package a reproduction tree with tracked changes:\n"
+            "refusing to package a reproduction tree with uncommitted changes:\n"
             + reproduction_status
         )
     ds4_status = git_output(
@@ -283,6 +288,12 @@ def main() -> int:
     (model_dir / "q8-reference.txt").write_text(
         f"Baekpica/Motif-3-GGUF@{args.q8_revision}\n",
         encoding="utf-8",
+    )
+    (model_dir / "merged-bytes.txt").write_text(
+        f"{EXPECTED_MERGED_BYTES}\n", encoding="utf-8"
+    )
+    (model_dir / "merged-sha256.txt").write_text(
+        f"{EXPECTED_MERGED_SHA256}\n", encoding="utf-8"
     )
 
     checksum_path = args.out / "manifests/SHA256SUMS"

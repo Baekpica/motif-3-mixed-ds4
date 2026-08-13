@@ -36,11 +36,27 @@ layers, all 384 routed experts per sparse layer with top-8 routing, the shared
 expert, Grouped Differential Latent Attention (GDLA), Expert-Specific
 PolyNorm, modified mHC, and the complete one-layer MTP predictor.
 
+| | |
+|---|---:|
+| Architecture | Motif-3, 53 layers, 14 full + 39 SWA GDLA |
+| Routed experts retained | **384 / 384 per sparse layer** |
+| Tensors | **2,287** |
+| Artifact | **87.6957 GiB**, 11 shards |
+| Native H200 model/runtime | **91.262 GiB**, conservative measured repeat |
+| Native 256K session | **4.037 GiB**, measured |
+| Source context limit | 262,144 tokens |
+| H200 semantic execution | short/32K/64K/128K passed; 256K active |
+| Single-GB10 execution | **not yet validated** |
+
 ## Artifact
 
 | Variant | Split | Exact size | Purpose |
 |---|---:|---:|---|
 | **MQ87-88-FIT** | 11 files | 94,162,542,816 bytes (87.6957 GiB) | one-Spark capacity/release baseline |
+
+The canonical merged/unsharded byte stream used by native ds4 is
+94,162,541,472 bytes with SHA-256
+`15755a735753bc1396e5ffa539e65a779a4fd769e8833360a4d743c4c60c2f25`.
 
 Start with `Motif-3-MQ87-88-FIT-00001-of-00011.gguf`; compatible split-aware
 runtimes discover the remaining shards automatically. Exact per-shard hashes
@@ -154,7 +170,7 @@ rank-local accumulators are preserved in the private Spark handoff.
 | Official implementation oracle | `MotifTechnologies/vllm@4cd9eb4129883565e69d508038d783d59ee01867` |
 | Conversion base | `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d` |
 | ds4 base | `Baekpica/ds4@b0309611041655f4e45671cfd9c9886aff161406` |
-| Native ds4 implementation | `Baekpica/ds4:feature/motif-3-model-loader@bbce7eecf54703ae315328d4e240531c5a9f1a22` |
+| Native ds4 implementation | `Baekpica/ds4:feature/motif-3-model-loader@d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9` |
 | Public reproduction | [`Baekpica/motif-3-mixed-ds4`](https://github.com/Baekpica/motif-3-mixed-ds4) |
 | Private Spark handoff | Expensive calibration state plus offline reproduction/runtime snapshots are preserved in `hf://buckets/Baekpica/motif-3-spark-handoff` |
 
@@ -176,9 +192,13 @@ allocator overhead. This is a physical H200 measurement, not a Spark claim.
 Physical unified-memory residency and OS headroom on the target GB10 remain
 authoritative.
 
-The final native-`sm_90` H200 model/runtime initialization delta plus the
-256K-session delta was 101,773,148,160 bytes (94.783630371094 GiB). This supports the capacity design;
+The higher of two native-`sm_90` H200 model/runtime initialization repeats plus
+the 256K-session delta was 102,326,337,536 bytes (95.298828125 GiB). This supports the capacity design;
 it does not predict GB10 driver, allocator, or OS overhead.
+The conservative H200 component measurements place model/runtime at 91.262
+GiB and the native 256K session at 4.037 GiB, inside the design preferences of
+98 GiB and 5 GiB respectively; only the target GB10 can establish unified-
+memory admission and final `MemAvailable`.
 
 ## Runtime compatibility
 
@@ -200,6 +220,11 @@ production latent-KV/SWA-ring sessions, strict device-resident model loading,
 the official tokenizer/chat/reasoning/tool protocol, and an OpenAI-compatible
 `ds4-server` path. Motif sessions refuse streaming/offloaded weights and never
 fall through to the generic DeepSeek graph.
+
+A clean clone at the pinned revision also completed `make cuda-spark` and
+linked the five runtime programs plus Motif CUDA/resident/long tests; every
+resulting CUDA code object was `sm_121a`. This confirms target build readiness,
+not GB10 execution, residency, correctness, or performance.
 
 The public files use standard GGUF splitting. The current ds4 development
 loader consumes one merged GGUF, so merge from the first shard with
@@ -227,10 +252,11 @@ Q8_0, `0.9417932` for IQ2_XXS, and `0.9580462` for Q2_K. The native ds4
 Motif-3 binder also accepted the completed mixed artifact as the official-final
 53-layer, 14-full/39-SWA, 384E top-8 topology with MTP present.
 
-The final explicitly rebuilt `sm_90` runtime copied the full 87.70 GiB image
-into one H200 in 9.560 seconds without SSD streaming or CPU weight offload. The measured
-CUDA free-memory delta for model and runtime initialization was
-97,438,334,976 bytes. Strict residency fails startup instead of silently using
+Two final explicitly rebuilt `sm_90` runtime repeats copied the full 87.70 GiB
+image into one H200 in 9.560–12.070 seconds without SSD streaming or CPU
+weight offload. The measured CUDA free-memory delta for model and runtime
+initialization was 97,438,334,976–97,991,524,352 bytes; capacity accounting
+uses the higher result. Strict residency fails startup instead of silently using
 host-mapped weights.
 
 Once optional CUDA preparation finishes, ds4 discards the raw GGUF tensor
@@ -239,9 +265,13 @@ RSS fell from 91,955,608 kB to 9,416 kB and remained low through inference, so
 the raw file is not kept as a second steady physical weight image beside the
 CUDA-owned model copy.
 
+The final all-`sm_90` full-question 256K H200 process also measured 9,416 kB
+of GGUF mapping RSS during active prefill with `VmSwap: 0`, after allocating
+the complete 262,144-token production latent cache.
+
 The automated resident gate caps this mapping at 262,144 kB both after copy
 and after native graph/cache execution. Its final native-`sm_90` H200 run
-measured 9,416 kB and 29,640 kB respectively.
+measured 9,416 kB and 29,512–29,640 kB respectively.
 
 The native expanded-path oracle and production latent path selected the same
 first token and all top-8 logits on the short fixture; full-logit cosine was
@@ -256,19 +286,28 @@ teacher-forced rows with finite logits.
 |---:|---|---:|---:|---|
 | 2K | OpenAI chat | 346.72 tok/s | 12.64 tok/s | exact beginning/middle/end JSON |
 | 32K | native, all-`sm_90` | 125.34 tok/s | 1.942 tok/s | exact beginning/middle/end JSON; 43-token decode |
-| 32K | OpenAI chat | 124.92 tok/s | 1.95 tok/s | exact JSON; 32,768 prompt tokens |
-| 64K | native | 68.54 tok/s | 1.023 tok/s | exact beginning/middle/end JSON |
-| 128K | native | 36.34 tok/s | 0.525 tok/s | exact JSON; 131,072-token prompt + 49-token decode |
-| 256K | native | running | running | isolated H200 gate in progress |
+| 32K | OpenAI chat, all-`sm_90` | 125.22 tok/s | 1.941 tok/s | exact JSON; model ID and 32,768 prompt tokens exact |
+| 64K | native, all-`sm_90` | 68.72 tok/s | 1.021 tok/s | exact beginning/middle/end JSON; 52-token decode |
+| 128K | native, all-`sm_90` | 36.36 tok/s | 0.524 tok/s | exact JSON; 131,072-token prompt + 49-token decode |
+| 256K | native, legacy trim | running | running | isolated bring-up gate in progress |
+| 256K | native, all-`sm_90`, full question | running | running | authoritative corrected H200 gate in progress |
 
-The OpenAI 32K and native 64K/128K/256K rows predate the final explicit
-`sm_90` rebuild and execute on H200 through the CUDA toolkit-compatible default
-code object, with MMQ already at `sm_90`. Their rates are correctness bring-up
-data, not native-`sm_90` performance claims. The final overlay has every CUDA
-code object verified as `sm_90`, passes the full resident graph/cache
-regression, and separately passes the exact native-`sm_90` 32K row shown
-above. Precision, topology, and context were not reduced to improve these
+The isolated legacy-trim 256K row predates the final explicit `sm_90` rebuild
+and executes through the CUDA toolkit-compatible default code object, with MMQ
+already at `sm_90`. Its rate is correctness bring-up data, not a native-
+`sm_90` performance claim. The final overlay has every CUDA code object
+verified as `sm_90`, passes the full resident graph/cache regression, and
+passes the native-`sm_90` 32K API plus native 32K/64K/128K rows shown above.
+The separately listed full-question 256K process uses that same all-`sm_90`
+binary. Precision, topology, and context were not reduced to improve these
 figures.
+
+The isolated 256K process also uses a legacy decode-reservation constant: it
+keeps the final 20 tokens and omits the five-token prefix `QUESTION: Return
+only a`, while retaining the full JSON/order instruction. Final ds4 revision
+`d878ea1` corrects the tail to 25 tokens. The handoff's separately hash-pinned
+262,080-token OpenAI fixture removes only filler and preserves the complete
+question; that corrected server gate remains mandatory on GB10.
 
 The OpenAI server also completed a structured `get_weather` tool-call/result
 loop. Its no-thinking continuation reused the full 165-token live prefix and

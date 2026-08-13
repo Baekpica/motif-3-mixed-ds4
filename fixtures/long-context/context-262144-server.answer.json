@@ -1,0 +1,16 @@
+{
+  "source_target_tokens": 262144,
+  "prompt_tokens": 262080,
+  "admitted_context": 262144,
+  "decode_reserve": 64,
+  "expected_json": [
+    "MOTIF-262144-BEGIN-7Q2K",
+    "MOTIF-262144-MIDDLE-9R4V",
+    "MOTIF-262144-END-3X8P"
+  ],
+  "system_prompt": "You are a precise long-context retrieval assistant. Follow the user output format exactly.",
+  "official_chat_template": true,
+  "enable_thinking": false,
+  "rendered_chat_retokenizes_exactly": true,
+  "decoded_equals_rendered_chat": true
+}

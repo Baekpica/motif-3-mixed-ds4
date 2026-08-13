@@ -1,0 +1,16 @@
+ds4 handoff patch audit
+=======================
+
+Audit time: 2026-08-13 21:01 UTC
+Repository: Baekpica/ds4
+Base: b0309611041655f4e45671cfd9c9886aff161406
+Motif head: d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9
+Branch: feature/motif-3-model-loader
+
+The exact binary diff produced by:
+  git diff --binary BASE HEAD
+
+was piped to `git apply --check -` in a separate clean checkout detached at
+BASE. Result: PASSED. The private bucket packages this same `tracked.patch`,
+the three revision/branch/origin records, and complete copies of each
+Motif-touched source and test file.

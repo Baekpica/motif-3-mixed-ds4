@@ -1,0 +1,56 @@
+Final native-sm90 strict-residency repeat
+=========================================
+
+Completion: 2026-08-13 20:41 UTC
+GPU: isolated NVIDIA H200 device 0
+Runtime revision: fa3f24f84f52fc91a0769b2eca021c95b422746e
+Final handoff note: d878ea1 changes only the 256K standalone fixture-tail
+constant; this resident graph is byte-identical.
+Build: all linked CUDA code objects verified as sm_90
+Artifact: /motif3/artifacts/Motif-3-MQ87-FIT.gguf
+
+Model copy/preparation:
+  GGUF bytes: 94,162,541,472
+  chunk-copy time: 12.070 s
+  copied tensor spans: 87.69 GiB
+  CUDA model/runtime free-memory delta: 97,991,524,352 bytes
+  CUDA model/runtime delta: 91.261718750000 GiB
+  source GGUF pages released after resident preparation: 87.69 GiB
+  source mapping RSS after CUDA copy: 9,416 KiB (limit 262,144 KiB)
+
+Real mixed sparse path:
+  router: 384E top-8 exact
+  Expert-Specific PolyNorm NRMSE: 2.63e-11
+  Q2_K down cosine: 0.9996071
+  combined sparse output cosine: 0.9998363
+
+Expanded/latent/MTP:
+  expanded 21-token prefill: 79.21 tok/s
+  latent 21-token prefill: 127.58 tok/s
+  first token: exact
+  top-8 overlap: 8/8
+  logit cosine: 0.99490164
+  MTP: 19 teacher-forced rows, finite logits, rank 11
+
+Cache lifecycle:
+  one-chunk prefill: 387.88 tok/s
+  prefix extension: 219.74 tok/s
+  following decode: 19.214 tok/s
+  identical suffix replay: cosine 1.0, NRMSE 0
+
+Native 262,144-token session allocation:
+  latent/RoPE/SWA tensor payload: 4,236,751,872 bytes (3.945782661438 GiB)
+  CUDA free-memory delta: 4,334,813,184 bytes (4.037109375 GiB)
+  conservative model/runtime + session sum: 102,326,337,536 bytes
+  conservative combined delta: 95.298828125000 GiB
+  source mapping RSS after inference: 29,512 KiB (limit 262,144 KiB)
+
+Result: PASSED. Full model remained CUDA-owned; no SSD streaming, CPU weight
+offload, multi-tier expert cache, or persistent expanded historical K/V was
+used. Engine close released the allocations within the test tolerance.
+
+Repeat context:
+  The preceding all-sm_90 resident pass measured 9.560 s copy,
+  97,438,334,976 bytes (90.746520996094 GiB) model/runtime delta, and
+  29,640 KiB post-inference mapping RSS. Documentation uses the higher
+  91.261718750000 GiB repeat for conservative capacity accounting.

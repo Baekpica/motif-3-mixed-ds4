@@ -1,0 +1,47 @@
+H200 native-sm90 OpenAI-compatible 32K correctness evidence
+=============================================================
+
+UTC start: 2026-08-13 20:20:16 (approximately)
+UTC completion: 2026-08-13 20:25:00
+Host: Runpod 4x NVIDIA H200; isolated CUDA_VISIBLE_DEVICES=2
+Runtime: Baekpica/ds4 feature/motif-3-model-loader
+Revision: fa3f24f84f52fc91a0769b2eca021c95b422746e
+Final handoff note: d878ea1 changes only the 256K standalone fixture-tail
+constant; this OpenAI server path is byte-identical.
+Build: make -B CUDA_ARCH=sm_90; all linked CUDA code objects checked by cuobjdump
+Artifact: /motif3/artifacts/Motif-3-MQ87-FIT.gguf
+Fixture: /motif3/handoff-fixtures/long-context/context-32768.txt
+Server model id: motif-3
+Context admission: 32,832 tokens
+Prefill chunk: 256 tokens
+Maximum completion: 64 tokens
+Temperature: 0
+Thinking: false
+
+/v1/models:
+{"ids":["motif-3"],"name":"Motif-3","context_length":32832}
+
+Final server timing:
+prefill 32768/32768, 261.689 s, 125.217338 tok/s
+decode 43 tokens, 22.154 s, 1.940959 tok/s
+request total 283.842 s
+
+/v1/chat/completions validated response:
+{
+  "model": "motif-3",
+  "content": "[\"MOTIF-32768-BEGIN-7Q2K\", \"MOTIF-32768-MIDDLE-9R4V\", \"MOTIF-32768-END-3X8P\"]",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 32768,
+    "completion_tokens": 43,
+    "total_tokens": 32811,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 32768
+    }
+  }
+}
+
+Assertions: model id exact; prompt token count exact; three beginning/middle/end
+retrieval codes exact and in the requested JSON-only order; finite decode; clean
+server drain after the completed request. Result: PASSED.
