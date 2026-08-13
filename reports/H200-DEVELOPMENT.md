@@ -130,8 +130,8 @@ On the live server, the GGUF mapping RSS fell from `91,955,608 kB` to
 GGUF is not a second steady physical weight image beside the CUDA-owned copy,
 which is required before unified-memory admission on Spark.
 
-The final all-`sm_90` full-question 256K process independently retained the
-same `9,416 kB` GGUF mapping RSS during active long prefill, with process
+The final all-`sm_90` full-question 256K attempt independently retained the
+same `9,416 kB` GGUF mapping RSS during its partial long prefill, with process
 `VmSwap: 0` and 98,471 MiB reported on its physical H200. Its startup log
 confirmed source-page release after the 87.69 GiB resident copy and allocated
 the 3.954 GiB production latent cache before prefill.
@@ -151,9 +151,11 @@ CUDA code object verified as `sm_90` by `cuobjdump` and separately passed the
 complete resident native graph/cache gate. A separately linked all-`sm_90`
 long binary passed exact 32K, 64K, and 128K retrieval at 125.34/1.942,
 68.72/1.021, and 36.36/0.524 tok/s prefill/decode respectively. The same
-binary and full-question 262,080-token input are running as the authoritative
-H200 256K gate. An all-`sm_90` `ds4-server` rebuild independently passed the
-32K fixture via the OpenAI API at 125.22 tok/s prefill and 1.941 tok/s decode.
+binary and full-question 262,080-token input reached 106,496 completed prefill
+tokens before the user directed remaining execution and optimization to the
+Spark handoff. It did not decode and is not a 256K correctness pass. An
+all-`sm_90` `ds4-server` rebuild independently passed the 32K fixture via the
+OpenAI API at 125.22 tok/s prefill and 1.941 tok/s decode.
 
 ## Numerical and structural fixtures
 
@@ -259,11 +261,11 @@ template re-tokenizes to the exact authoritative token array.
 The final handoff derives a separate 262,080-token OpenAI fixture by removing
 exactly 64 one-token filler repetitions immediately before the actual 25-token
 question/generation tail. It preserves the full question and all three records
-inside a 262,144-token admission. A post-start audit found that the already-
-running H200 256K binary used an older 20-token tail constant and consequently
+inside a 262,144-token admission. A post-start audit found that the legacy
+H200 256K binary used an older 20-token tail constant and consequently
 omits the leading five tokens `QUESTION: Return only a` while retaining the
-complete JSON/order instruction. That process was not interrupted or relabeled;
-its final row is disclosed as legacy-trim evidence. Final ds4 revision
+complete JSON/order instruction. That process was never relabeled; it reached
+245,760 completed prefill tokens before the same user-directed stop. Final ds4 revision
 `d878ea1` corrects the constant, and the exact corrected token transformation
 is locked by the 12-test reproduction suite.
 
@@ -274,15 +276,17 @@ is locked by the 12-test reproduction suite.
 | 32K | OpenAI chat, all-`sm_90` | 125.22 tok/s | 1.941 tok/s | exact three-code JSON; model ID and 32,768 prompt tokens exact |
 | 64K | native standalone, all-`sm_90` | 68.72 tok/s | 1.021 tok/s | exact three-code JSON; 52-token decode |
 | 128K | native standalone, all-`sm_90` | 36.36 tok/s | 0.524 tok/s | exact three-code JSON; 131,072-token prompt + 49-token decode |
-| 256K | native standalone, legacy trim | running | running | isolated H200 bring-up gate |
-| 256K | native standalone, all-`sm_90`, full question | running | running | authoritative corrected H200 gate |
+| 256K | native standalone, legacy trim | 245,760/262,080 partial; 20.02 cumulative tok/s | not attempted | stopped for Spark handoff; no correctness verdict |
+| 256K | native standalone, all-`sm_90`, full question | 106,496/262,080 partial; 44.26 cumulative tok/s | not attempted | stopped for Spark handoff; no correctness verdict |
 
-These are correctness measurements from the current unfused bring-up graph,
-not release speed claims. The expected decline at long context identifies GDLA
-as the primary optimization target. Precision, topology, and context were not
-reduced to improve the figures. NVIDIA Nsight Systems/Compute are not installed
-on this Runpod image, so no synthetic profiler claim is made; focused kernel
-profiling remains in the Spark handoff.
+The completed rows through 128K are correctness measurements from the current
+unfused bring-up graph, not release-speed claims. The two 256K rows are partial
+prefill observations only. Their decline identifies GDLA as the primary
+optimization target, but neither completed prefill or decode. Precision,
+topology, and context were not reduced to improve the figures. NVIDIA Nsight
+Systems/Compute are not installed on this Runpod image, so no synthetic
+profiler claim is made; focused kernel profiling and the full 256K gate remain
+in the Spark handoff.
 
 In a separate clean clone at the pinned final ds4 revision, `make cuda-spark`
 successfully compiled and linked the CLI, OpenAI server, bench/eval/agent, and
@@ -294,8 +298,9 @@ check only; the Blackwell binaries were not and cannot be executed on H200.
 ## Scope boundary
 
 This H200 stage establishes native resident execution, latent-cache lifecycle,
-short/long correctness gates, and an OpenAI-compatible server on a discrete
-H200. It does **not** establish physical unified-memory residency, available
-OS headroom, `sm_121a` kernel behavior, or 262,144-token serving on one GB10.
+correctness through 128K, and an OpenAI-compatible server on a discrete H200.
+It does **not** establish a completed 256K prefill/decode, physical unified-
+memory residency, available OS headroom, `sm_121a` kernel behavior, or
+262,144-token serving on one GB10.
 Those measurements remain mandatory on the target DGX Spark and cannot be
 inferred from the GGUF size or H200 VRAM results.

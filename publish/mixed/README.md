@@ -45,7 +45,7 @@ PolyNorm, modified mHC, and the complete one-layer MTP predictor.
 | Native H200 model/runtime | **91.262 GiB**, conservative measured repeat |
 | Native 256K session | **4.037 GiB**, measured |
 | Source context limit | 262,144 tokens |
-| H200 semantic execution | short/32K/64K/128K passed; 256K active |
+| H200 semantic execution | short/32K/64K/128K passed; 256K partial prefill only |
 | Single-GB10 execution | **not yet validated** |
 
 ## Artifact
@@ -265,8 +265,8 @@ RSS fell from 91,955,608 kB to 9,416 kB and remained low through inference, so
 the raw file is not kept as a second steady physical weight image beside the
 CUDA-owned model copy.
 
-The final all-`sm_90` full-question 256K H200 process also measured 9,416 kB
-of GGUF mapping RSS during active prefill with `VmSwap: 0`, after allocating
+The final all-`sm_90` full-question 256K H200 attempt also measured 9,416 kB
+of GGUF mapping RSS during partial prefill with `VmSwap: 0`, after allocating
 the complete 262,144-token production latent cache.
 
 The automated resident gate caps this mapping at 262,144 kB both after copy
@@ -289,18 +289,26 @@ teacher-forced rows with finite logits.
 | 32K | OpenAI chat, all-`sm_90` | 125.22 tok/s | 1.941 tok/s | exact JSON; model ID and 32,768 prompt tokens exact |
 | 64K | native, all-`sm_90` | 68.72 tok/s | 1.021 tok/s | exact beginning/middle/end JSON; 52-token decode |
 | 128K | native, all-`sm_90` | 36.36 tok/s | 0.524 tok/s | exact JSON; 131,072-token prompt + 49-token decode |
-| 256K | native, legacy trim | running | running | isolated bring-up gate in progress |
-| 256K | native, all-`sm_90`, full question | running | running | authoritative corrected H200 gate in progress |
+| 256K | native, legacy trim | 245,760/262,080 partial; 20.02 cumulative tok/s | not attempted | stopped for Spark handoff; not a correctness pass |
+| 256K | native, all-`sm_90`, full question | 106,496/262,080 partial; 44.26 cumulative tok/s | not attempted | stopped for Spark handoff; not a correctness pass |
+
+> [!CAUTION]
+> **Native Motif-3 kernel optimization is still in progress.** The current
+> ds4 path is a correctness-first implementation; these H200 throughput
+> figures are bring-up measurements, not optimized release claims. Complete
+> 256K prefill/decode and `sm_121a` profiling/optimization continue in the DGX
+> Spark handoff.
 
 The isolated legacy-trim 256K row predates the final explicit `sm_90` rebuild
 and executes through the CUDA toolkit-compatible default code object, with MMQ
-already at `sm_90`. Its rate is correctness bring-up data, not a native-
-`sm_90` performance claim. The final overlay has every CUDA code object
-verified as `sm_90`, passes the full resident graph/cache regression, and
-passes the native-`sm_90` 32K API plus native 32K/64K/128K rows shown above.
-The separately listed full-question 256K process uses that same all-`sm_90`
-binary. Precision, topology, and context were not reduced to improve these
-figures.
+already at `sm_90`. Its rate is partial bring-up data, not a native-`sm_90`
+performance claim. The final overlay has every CUDA code object verified as
+`sm_90`, passes the full resident graph/cache regression, and passes the
+native-`sm_90` 32K API plus native 32K/64K/128K rows shown above. The
+full-question attempt used that all-`sm_90` binary. At the user's direction,
+both 256K attempts were stopped before decode and the remaining execution and
+optimization were transferred to Spark. Precision, topology, and context were
+not reduced to improve these figures.
 
 The isolated 256K process also uses a legacy decode-reservation constant: it
 keeps the final 20 tokens and omits the five-token prefix `QUESTION: Return

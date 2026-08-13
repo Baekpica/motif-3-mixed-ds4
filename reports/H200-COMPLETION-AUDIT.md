@@ -21,7 +21,8 @@ explicit in `DGX-SPARK-HANDOFF.md`.
 | 262,144-token production cache allocation | 4,236,751,872-byte latent/RoPE/SWA payload; 4,334,813,184-byte CUDA delta; no persistent expanded historical K/V | Passed |
 | OpenAI-compatible server and continuous batching | Exact 2K and 32K OpenAI retrieval, streaming/non-streaming unit coverage, structured tool continuation, full live-prefix reuse, and two resident sessions | Passed |
 | Target 256K OpenAI gate reproducibility | Hash-pinned 262,080-token fixture preserves full 25-token question plus all records; strict stdlib API client validates model ID, token accounting, ordered JSON, stop reason, and decode | Prepared and locally integrity-tested; GB10 execution remains open |
-| Short/32K/64K/128K/256K correctness | `H200-VALIDATION.json` and exact deterministic long fixtures | PENDING_256_RESULT |
+| Short/32K/64K/128K/256K correctness | `H200-VALIDATION.json` and exact deterministic long fixtures | Short/32K/64K/128K passed. The two 256K attempts stopped before decode at 245,760 and 106,496 completed prefill tokens; 256K is explicitly not passed and is transferred to Spark per user direction. |
+| Kernel optimization status | H200 timing rows and model-card caution; Nsight tools absent on this host | Correctness-first graph only. No optimized release-speed claim; profiling and prefill/decode optimization transferred to Spark per user direction. |
 | Public Q8 and mixed artifacts | `Baekpica/Motif-3-GGUF` and `Baekpica/Motif-3-Mixed-Quant-GGUF`; fixed shard revisions and SHA-256 manifests | Passed |
 | Public reproduction and runtime | `Baekpica/motif-3-mixed-ds4` and the pinned public ds4 branch above | Passed |
 | Offline ds4 patch reproducibility | Binary patch from pinned main base `b030961…` to Motif head `d878ea1…` passes `git apply --check` in a clean detached base checkout | Passed |

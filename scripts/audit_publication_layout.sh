@@ -18,7 +18,8 @@ q8_info=$(hf models info "$Q8_REPO" --revision "$Q8_REV" \
   --expand sha,private,siblings)
 jq -e --arg sha "$Q8_REV" '
   .sha == $sha and .private == false and
-  ([.siblings[].rfilename | select(test("Motif-3-Q8_0-[0-9]{5}-of-00011\\.gguf$"))] | length) == 11
+  ([.siblings[].rfilename | select(test("Motif-3-Q8_0-[0-9]{5}-of-00011\\.gguf$"))] | length) == 11 and
+  ([.siblings[].rfilename | select(test("MQ87|MQ95|MQ97"))] | length) == 0
 ' <<<"$q8_info" >/dev/null
 
 mixed_info=$(hf models info "$MIXED_REPO" --revision "$MIXED_REV" \
@@ -78,6 +79,16 @@ test "$remote_ds4" = "$DS4_REV"
 bucket_info=$(hf buckets info "$BUCKET")
 jq -e --arg id "$BUCKET" '.id == $id and .private == true' \
   <<<"$bucket_info" >/dev/null
+bucket_files=$(hf buckets ls "$BUCKET" -R --format json)
+jq -e '
+  ([.[] | select(.type == "file" and (.path | endswith(".gguf")))] |
+    length) == 0 and
+  any(.[]; .path == "calibration/Motif-3-Q8_0-imatrix.dat") and
+  any(.[]; .path == "manifests/SHA256SUMS") and
+  any(.[]; .path == "model/revision.txt") and
+  any(.[]; .path == "ds4/HEAD.txt") and
+  any(.[]; .path == "fixtures/long-context/context-262144-server.tokens.npy")
+' <<<"$bucket_files" >/dev/null
 
 printf 'public Q8 model: %s@%s (11 shards)\n' "$Q8_REPO" "$Q8_REV"
 printf 'public mixed model: %s@%s (11 shards)\n' "$MIXED_REPO" "$MIXED_REV"
@@ -89,4 +100,5 @@ printf 'public GitHub reproduction: https://github.com/%s\n' "$REPRO_REPO"
 printf 'reproduction revision: %s\n' "$remote_repro"
 printf 'public ds4 runtime: %s@%s\n' "$DS4_BRANCH" "$DS4_REV"
 printf 'private Spark handoff: hf://buckets/%s\n' "$BUCKET"
+printf 'private handoff contains no duplicate public GGUF shards\n'
 printf 'wrong HF model repository absent: %s\n' "$REPRO_REPO"

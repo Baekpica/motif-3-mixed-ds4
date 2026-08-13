@@ -24,10 +24,11 @@
     tool, continuous-batching, short, 32K, 64K, and 128K gates; explicitly
     rebuild and audit all final runtime code objects as `sm_90`, then repeat
     the resident and exact 32K gates.
-11. **Running** — Complete the final all-`sm_90`, full-question 256K H200
-    prefill/decode gate, then finalize the public Q8/Mixed reports and
-    checksum-complete private Spark handoff bucket. The earlier legacy-tail
-    process remains separately disclosed rather than substituted for it.
+11. **Complete for H200 handoff** — Freeze the public Q8/Mixed reports and
+    checksum-complete private Spark handoff. The legacy-tail and corrected
+    full-question 256K attempts are disclosed at 245,760 and 106,496 completed
+    prefill tokens respectively; neither completed prefill or decode. Per the
+    user-directed stop, no H200 256K pass is claimed.
 12. **Target-host handoff** — On one GB10, rebuild for `sm_121a` and validate
     resident 32K/64K/128K/256K prefill/decode, OpenAI-compatible serving, and
     physical unified-memory/OS headroom.

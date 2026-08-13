@@ -113,8 +113,9 @@ The OpenAI-compatible server returned the exact 2,048-token retrieval answer
 at 346.72 tok/s prefill and 12.64 tok/s decode, completed a structured tool
 call/result loop with full live-prefix reuse, and served two simultaneous
 resident sessions. Native 32K, 64K, and 128K beginning/middle/end retrieval
-gates also passed; the 256K H200 gate is recorded in `H200-DEVELOPMENT.md`
-when complete.
+gates also passed. Two 256K attempts reached 245,760 and 106,496 completed
+prefill tokens but were stopped before decode when the user moved remaining
+execution and optimization to Spark; neither is a 256K correctness pass.
 
 ## Remaining target-hardware gates
 

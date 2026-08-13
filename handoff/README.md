@@ -51,6 +51,9 @@ also passed the native loader/structure checks.
 
 Do not requantize or silently change the artifact during Spark kernel, cache,
 or server work. The H200 record contains native short/long inference evidence,
-but this handoff does not itself claim single-GB10 262,144-token serving;
-resident Spark prefill/decode, unified-memory headroom, and OpenAI-compatible
-server validation on the target machine remain explicit release gates.
+with correctness completed through 128K. Its two 256K attempts were stopped at
+245,760 and 106,496 completed prefill tokens before decode when the user moved
+remaining execution and optimization to Spark. This handoff does not itself
+claim a completed 256K gate or single-GB10 262,144-token serving; resident
+Spark prefill/decode, unified-memory headroom, and OpenAI-compatible server
+validation on the target machine remain explicit release gates.

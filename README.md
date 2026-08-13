@@ -22,7 +22,7 @@ or distilled.
 | Real Q8 activation calibration | 302,080 tokens, 123,248,640 routed observations, zero missing cells across 51×384 layer/experts |
 | MQ87-88-FIT | 94,162,541,472-byte unsharded GGUF; 87.6957 GiB; 11 public shards; all 2,287 tensors verified |
 | Native ds4 H200 execution | Router/shared/dense/PolyNorm/mHC/GDLA/latent KV/MTP/tokenizer/tools/OpenAI server implemented and exercised |
-| Context correctness | 2K, 32K, 64K, and 128K passed; an all-`sm_90` full-question 256K gate is active |
+| Context correctness | 2K, 32K, 64K, and 128K passed; 256K attempts reached 245,760 and 106,496 prompt tokens but were stopped before decode for Spark handoff |
 | Target DGX Spark | Deliberately pending; exact code, fixtures, model hashes, and expensive calibration state are in the private handoff |
 
 `87-88 GiB` is a nominal capacity class, not a cosmetic hard cutoff. This
@@ -129,9 +129,11 @@ log emits `compute_121a`/`sm_121a`; do not reuse H200 binaries.
 
 The H200 evidence covers strict CUDA weight residency, source-page release,
 production latent cache allocation/lifecycle, native generation, the
-OpenAI-compatible server, tools, continuous batching, and the context gates
-listed above. It does not claim completed single-DGX-Spark 262,144-token
-serving. That claim requires the immutable artifact to pass the supplied
+OpenAI-compatible server, tools, continuous batching, and completed context
+gates through 128K. The two partial 256K prefill attempts did not decode and
+are not correctness passes. This repository does not claim completed
+single-DGX-Spark 262,144-token serving. That claim requires the immutable
+artifact to pass the supplied
 32K/64K/128K/256K and API gates on one GB10 with model, cache, workspace,
 server, and required `MemAvailable` resident, without SSD streaming or CPU
 weight offload.

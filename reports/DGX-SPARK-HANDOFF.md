@@ -59,12 +59,22 @@ resident, and long-test binaries contained only `sm_121a` code objects. That
 does not replace this clean rebuild or any execution gate on the actual GB10.
 
 ```bash
+{
+  date -u +'%Y-%m-%dT%H:%M:%SZ'
+  uname -a
+  nvcc --version
+  nvidia-smi --query-gpu=name,compute_cap,memory.total,driver_version \
+    --format=csv,noheader
+  free -b
+} | tee "$HANDOFF_DIR/reports/spark-host.txt"
+
 DS4_DIR=/workspace/motif-3-ds4
 DS4_REV=d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9
 git clone --branch feature/motif-3-model-loader \
   https://github.com/Baekpica/ds4.git "$DS4_DIR"
 git -C "$DS4_DIR" checkout --detach "$DS4_REV"
 test "$(git -C "$DS4_DIR" rev-parse HEAD)" = "$DS4_REV"
+test -z "$(git -C "$DS4_DIR" status --porcelain)"
 
 make -C "$DS4_DIR" clean
 make -C "$DS4_DIR" cuda-spark 2>&1 | tee "$HANDOFF_DIR/reports/spark-build.log"
@@ -81,6 +91,17 @@ make -C "$DS4_DIR" \
   tests/test_motif3_tokenizer tests/test_motif3_cuda \
   tests/test_motif3_resident tests/test_motif3_long \
   CUDA_ARCH=sm_121
+
+for BINARY in \
+  ds4 ds4-server ds4-bench ds4-eval ds4-agent \
+  tests/test_motif3_cuda tests/test_motif3_resident tests/test_motif3_long; do
+  ARCHS=$(cuobjdump --list-elf "$DS4_DIR/$BINARY" | \
+    grep -oE 'sm_[0-9]+a?' | sort -u)
+  test "$ARCHS" = sm_121a || {
+    echo "unexpected CUDA code objects in $BINARY: $ARCHS" >&2
+    exit 1
+  }
+done
 
 "$DS4_DIR/tests/test_motif3_loader" "$MERGED_MODEL"
 "$DS4_DIR/tests/test_motif3_reference" \
@@ -107,6 +128,9 @@ For the release server, deliberately omit both `--ssd-streaming` and
 `--kv-disk-dir`:
 
 ```bash
+unset DS4_CUDA_NO_MODEL_COPY DS4_CUDA_DIRECT_MODEL DS4_CUDA_WEIGHT_CACHE
+unset DS4_CUDA_WEIGHT_PRELOAD DS4_CUDA_KEEP_MODEL_PAGES
+export DS4_CUDA_COPY_MODEL_CHUNKED=1
 CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
   --cuda --model "$MERGED_MODEL" --ctx 262144 \
   --prefill-chunk 256 --batched-session 1 --tokens 64 \
@@ -178,16 +202,19 @@ SERVER_PID=$(pgrep -n -x ds4-server)
   `DS4_CUDA_KEEP_MODEL_PAGES` for the capacity run.
 - Short-context expanded/latent parity, chunk/ring lifecycle, OpenAI 2K,
   structured tool continuation with live-prefix reuse, two-session continuous
-  batching, and native 32K/64K/128K retrieval passed on H200. See the H200
-  report for the final 256K row.
+  batching, and native 32K/64K/128K retrieval passed on H200. The legacy and
+  corrected 256K attempts reached 245,760 and 106,496 completed prefill tokens
+  respectively, then were stopped before decode for this Spark handoff.
 
 See `reports/H200-DEVELOPMENT.md` and `reports/MIXED-QUANT.md` for exact
 artifact and numerical records. H200 results are development evidence only.
 One separately disclosed legacy-trim 256K process began before the host
 source-page discard fix. The final all-`sm_90` overlay passed the resident
-graph/cache regression and exact 32K/64K/128K gates, and its corrected
-full-question 256K gate is the authoritative H200 row. The Spark gate must
-still combine these properties in one target-host OpenAI server run.
+graph/cache regression and exact 32K/64K/128K gates. Its corrected
+full-question 256K attempt is partial execution evidence only: prefill and
+decode did not complete. Per the user's closeout direction, remaining 256K
+execution plus prefill/decode optimization are transferred here. The Spark
+gate must combine all properties in one target-host OpenAI server run.
 
 ## Initial capacity projection
 

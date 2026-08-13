@@ -1,7 +1,8 @@
 Motif-3 MQ87-88-FIT native 256K H200 correctness run
 ====================================================
 
-Scope: H200 correctness bring-up, not a DGX Spark or release-speed claim.
+Scope: partial H200 correctness bring-up, not a completed 256K gate, DGX
+Spark result, or release-speed claim.
 Start: 2026-08-14 03:12:37 KST (2026-08-13 18:12:37 UTC)
 GPU: physical H200 device 3
 Live executable SHA-256:
@@ -27,8 +28,8 @@ Final handoff revision `d878ea1a1d67bc0f0bd60e20e75b4a011aa2d8d9`
 corrects the constant to 25 and preserves the complete question. The added
 `context-262144-server` fixture is independently re-tokenized to exactly
 262,080 tokens, retains all 25 tail tokens and all three records, and is the
-authoritative OpenAI target-host gate. The running process was not interrupted
-or relabeled as that corrected gate.
+authoritative OpenAI target-host gate. This process was never relabeled as
+that corrected gate.
 
 Selected observed progress checkpoints:
   155648/262080 (59.4%), 30.97 tok/s, 5025.0 s
@@ -43,10 +44,18 @@ Selected observed progress checkpoints:
   229376/262080 (87.5%), 21.40 tok/s, 10719.4 s
   237568/262080 (90.6%), 20.69 tok/s, 11483.6 s
   245760/262080 (93.8%), 20.02 tok/s, 12274.2 s
-  PENDING_LATER_CHECKPOINTS
 
 Final process output:
-  PENDING_256_RESULT
+  operator stop: 2026-08-14 06:51 KST
+  observed exit: 130 after SIGINT
+  last completed checkpoint: 245760/262080 (93.8%)
+  prefill completed: no
+  decode attempted: no
+  semantic correctness verdict: not evaluated
+
+The user directed that the remaining prefill/decode work and optimization be
+transferred to the Spark handoff instead of spending further on-demand H200
+time. This row is retained only as partial capacity/execution evidence.
 
 Code-generation note:
   This isolated process started before the final explicit all-sm_90 rebuild.

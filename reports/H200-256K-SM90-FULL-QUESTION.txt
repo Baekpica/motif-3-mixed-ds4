@@ -1,8 +1,9 @@
 Motif-3 MQ87-88-FIT corrected full-question 256K H200 gate
 ================================================================
 
-Scope: authoritative H200 native correctness gate for the decode-reserved
-262,144-token context. This is not a DGX Spark performance or residency claim.
+Scope: partial all-sm_90 H200 execution of the authoritative decode-reserved
+input. It did not complete prefill or decode and is not a passed 256K gate,
+DGX Spark performance result, or Spark residency claim.
 
 Start: 2026-08-14 06:06:46 KST (2026-08-13 21:06:46 UTC)
 GPU: physical H200 device 0
@@ -54,7 +55,18 @@ Selected progress checkpoints:
   73728/262080 (28.1%), 61.97 tok/s, 1189.7 s
   81920/262080 (31.3%), 56.33 tok/s, 1454.2 s
   90112/262080 (34.4%), 51.64 tok/s, 1745.1 s
-  PENDING_LATER_CHECKPOINTS
+  98304/262080 (37.5%), 47.67 tok/s, 2062.3 s
+  106496/262080 (40.6%), 44.26 tok/s, 2406.1 s
 
 Final process output:
-  PENDING_256_SM90_FULL_QUESTION_RESULT
+  operator stop: 2026-08-14 06:51 KST
+  observed session exit: 1 after SIGINT
+  last completed checkpoint: 106496/262080 (40.6%)
+  prefill completed: no
+  decode attempted: no
+  semantic correctness verdict: not evaluated
+
+The user directed that remaining 256K execution and prefill/decode
+optimization move to DGX Spark. The exact full-question fixture, executable
+pin, resident-memory observations, and strict target-host commands remain in
+the handoff; this partial H200 row is not presented as a correctness pass.
