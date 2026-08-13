@@ -154,7 +154,7 @@ rank-local accumulators are preserved in the private Spark handoff.
 | Official implementation oracle | `MotifTechnologies/vllm@4cd9eb4129883565e69d508038d783d59ee01867` |
 | Conversion base | `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d` |
 | ds4 base | `Baekpica/ds4@b0309611041655f4e45671cfd9c9886aff161406` |
-| Native ds4 implementation | `Baekpica/ds4:feature/motif-3-model-loader@0a360dbe46dd50d26e170300adf18993ac3ab1a0` |
+| Native ds4 implementation | `Baekpica/ds4:feature/motif-3-model-loader@bbce7eecf54703ae315328d4e240531c5a9f1a22` |
 | Public reproduction | [`Baekpica/motif-3-mixed-ds4`](https://github.com/Baekpica/motif-3-mixed-ds4) |
 | Private Spark handoff | Expensive calibration state plus offline reproduction/runtime snapshots are preserved in `hf://buckets/Baekpica/motif-3-spark-handoff` |
 

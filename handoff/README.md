@@ -12,6 +12,8 @@ expensive calibration state and offline Spark handoff material live in this
 private bucket.
 
 - Public model: `Baekpica/Motif-3-Mixed-Quant-GGUF`
+- Native runtime: `Baekpica/ds4:feature/motif-3-model-loader` at
+  `bbce7eecf54703ae315328d4e240531c5a9f1a22`
 - Exact public revision: `model/revision.txt`
 - Mixed shard filenames and hashes: `model/filenames.txt` and
   `model/sha256.txt`

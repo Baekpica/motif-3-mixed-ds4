@@ -63,7 +63,7 @@ Q8_0; decision-sensitive controls remain at their locked higher precision.
 | Native context metadata | 262,144 tokens |
 | Official implementation oracle | `MotifTechnologies/vllm@4cd9eb4129883565e69d508038d783d59ee01867` |
 | Conversion base | `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d` |
-| Native runtime | [`Baekpica/ds4:feature/motif-3-model-loader@0a360dbe`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader) |
+| Native runtime | [`Baekpica/ds4:feature/motif-3-model-loader@bbce7eec`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader) |
 | Public reproduction | [`Baekpica/motif-3-mixed-ds4`](https://github.com/Baekpica/motif-3-mixed-ds4) |
 | Private Spark handoff | Expensive state is preserved in `hf://buckets/Baekpica/motif-3-spark-handoff` |
 
@@ -110,7 +110,7 @@ GGUF runtime recognizes `motif3` merely because it can parse the container.
 The H200 development branch is publicly available as
 [`Baekpica/ds4:feature/motif-3-model-loader`](https://github.com/Baekpica/ds4/tree/feature/motif-3-model-loader)
 at exact implementation commit
-`0a360dbe46dd50d26e170300adf18993ac3ab1a0`. The private Spark handoff also
+`bbce7eecf54703ae315328d4e240531c5a9f1a22`. The private Spark handoff also
 preserves an offline source snapshot and commit metadata.
 
 ## Intended use in the mixed-quant pipeline

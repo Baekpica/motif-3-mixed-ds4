@@ -40,7 +40,7 @@ target-host measurements.
 - llama.cpp conversion base: `1d2869c6e54d5003f3927a79efbca0fefa034a6d`
 - Baekpica/ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
 - Baekpica/ds4 Motif implementation:
-  `feature/motif-3-model-loader@0a360dbe46dd50d26e170300adf18993ac3ab1a0`
+  `feature/motif-3-model-loader@bbce7eecf54703ae315328d4e240531c5a9f1a22`
 - Mixed-weight revision: `efd6044e25e7f8e3b459a737d021091e2e69b6c6`
 - Q8 reference revision: `5c266c95bf8c8d822d50e5e1cce9d108eaadb2af`
 

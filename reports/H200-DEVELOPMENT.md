@@ -16,7 +16,7 @@ claim of single-DGX-Spark serving.
   `ggml-org/llama.cpp@1d2869c6e54d5003f3927a79efbca0fefa034a6d`
 - ds4 base: `Baekpica/ds4@b0309611041655f4e45671cfd9c9886aff161406`
 - ds4 Motif implementation:
-  `Baekpica/ds4@0a360dbe46dd50d26e170300adf18993ac3ab1a0`
+  `Baekpica/ds4@bbce7eecf54703ae315328d4e240531c5a9f1a22`
 - Public reproduction:
   `https://github.com/Baekpica/motif-3-mixed-ds4`
 

@@ -73,8 +73,11 @@
     "imatrix_sha256": "54fcc4d6d1fe96a3fc12bd24869eff128c724737ac07ce866ce08018a5e3cfbc"
   },
   "runtime": {
+    "repo": "https://github.com/Baekpica/ds4",
     "ds4_base": "b0309611041655f4e45671cfd9c9886aff161406",
     "branch": "feature/motif-3-model-loader",
+    "revision": "bbce7eecf54703ae315328d4e240531c5a9f1a22",
+    "public_reproduction": "https://github.com/Baekpica/motif-3-mixed-ds4",
     "build_arch": "sm_90",
     "native_family": "motif3",
     "full_attention_layers": 14,

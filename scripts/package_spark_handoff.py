@@ -51,6 +51,10 @@ def parse_args() -> argparse.Namespace:
         "--ds4-base",
         default="b0309611041655f4e45671cfd9c9886aff161406",
     )
+    parser.add_argument(
+        "--ds4-revision",
+        default="bbce7eecf54703ae315328d4e240531c5a9f1a22",
+    )
     return parser.parse_args()
 
 
@@ -102,6 +106,7 @@ def main() -> int:
         ("--model-revision", args.model_revision),
         ("--q8-revision", args.q8_revision),
         ("--ds4-base", args.ds4_base),
+        ("--ds4-revision", args.ds4_revision),
     ):
         if len(revision) != 40 or any(
             char not in "0123456789abcdef" for char in revision
@@ -111,6 +116,27 @@ def main() -> int:
         not args.out.is_dir() or any(args.out.iterdir())
     ):
         raise SystemExit(f"refusing to overwrite non-empty handoff: {args.out}")
+
+    reproduction_status = git_output(
+        ROOT, "status", "--short", "--untracked-files=no"
+    )
+    if reproduction_status:
+        raise SystemExit(
+            "refusing to package a reproduction tree with tracked changes:\n"
+            + reproduction_status
+        )
+    ds4_status = git_output(
+        args.ds4, "status", "--short", "--untracked-files=no"
+    )
+    if ds4_status:
+        raise SystemExit(
+            "refusing to package a ds4 tree with tracked changes:\n" + ds4_status
+        )
+    ds4_head = git_output(args.ds4, "rev-parse", "HEAD").strip()
+    if ds4_head != args.ds4_revision:
+        raise SystemExit(
+            f"ds4 HEAD mismatch: expected {args.ds4_revision}, found {ds4_head}"
+        )
     args.out.mkdir(parents=True, exist_ok=True)
 
     # Human-facing entry points and reports.
@@ -183,7 +209,7 @@ def main() -> int:
     ds4_dir = args.out / "ds4"
     ds4_dir.mkdir(parents=True, exist_ok=True)
     (ds4_dir / "HEAD.txt").write_text(
-        git_output(args.ds4, "rev-parse", "HEAD"), encoding="utf-8"
+        ds4_head + "\n", encoding="utf-8"
     )
     (ds4_dir / "branch.txt").write_text(
         git_output(args.ds4, "branch", "--show-current"), encoding="utf-8"
@@ -202,10 +228,12 @@ def main() -> int:
     )
     touched = (
         "Makefile",
+        "README.md",
         "ds4.c",
         "ds4.h",
         "ds4_cuda.cu",
         "ds4_gpu.h",
+        "ds4_help.c",
         "ds4_server.c",
         "gguf-tools/deepseek4-quantize.c",
         "tests/test_motif3_loader.c",

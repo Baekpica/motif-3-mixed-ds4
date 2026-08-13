@@ -15,7 +15,7 @@
 - ds4 branch: `feature/motif-3-model-loader`
 - ds4 base: `b0309611041655f4e45671cfd9c9886aff161406`
 - ds4 Motif implementation commit:
-  `0a360dbe46dd50d26e170300adf18993ac3ab1a0`
+  `bbce7eecf54703ae315328d4e240531c5a9f1a22`
 - Source model revision:
   `Motif-Technologies/Motif-3@ccceb1a5fd7b5eb32e47841216b3caf5666c07bc`
 
@@ -34,10 +34,11 @@ hf buckets cp \
   "$HANDOFF_DIR/scripts/pull_spark_handoff.sh"
 chmod +x "$HANDOFF_DIR/scripts/pull_spark_handoff.sh"
 
-BUCKET=Baekpica/motif-3-spark-handoff \
-MODEL_DIR=/workspace/motif-3-model \
-MERGED_MODEL=/workspace/motif-3-model/Motif-3-MQ87-88-FIT.gguf \
-GGUF_SPLITTER=/workspace/llama.cpp/build/bin/llama-gguf-split \
+BUCKET=Baekpica/motif-3-spark-handoff
+MODEL_DIR=/workspace/motif-3-model
+MERGED_MODEL=/workspace/motif-3-model/Motif-3-MQ87-88-FIT.gguf
+GGUF_SPLITTER=/workspace/llama.cpp/build/bin/llama-gguf-split
+export BUCKET MODEL_DIR MERGED_MODEL GGUF_SPLITTER
 "$HANDOFF_DIR/scripts/pull_spark_handoff.sh" "$HANDOFF_DIR"
 ```
 
@@ -51,6 +52,55 @@ Then obtain the pinned ds4 branch/state and build specifically for GB10. The
 build log must show `sm_121a`; do not reuse an H200 `sm_90` binary or object.
 Before serving, confirm that raw GGUF mappings and any aligned/repacked
 artifact are not simultaneously physically resident.
+
+```bash
+DS4_DIR=/workspace/motif-3-ds4
+DS4_REV=bbce7eecf54703ae315328d4e240531c5a9f1a22
+git clone --branch feature/motif-3-model-loader \
+  https://github.com/Baekpica/ds4.git "$DS4_DIR"
+git -C "$DS4_DIR" checkout --detach "$DS4_REV"
+test "$(git -C "$DS4_DIR" rev-parse HEAD)" = "$DS4_REV"
+
+make -C "$DS4_DIR" clean
+make -C "$DS4_DIR" cuda-spark 2>&1 | tee "$HANDOFF_DIR/reports/spark-build.log"
+grep -F -- '-gencode arch=compute_121a,code=sm_121a' \
+  "$HANDOFF_DIR/reports/spark-build.log"
+```
+
+Build and run the supplied target-host fixtures with that same architecture;
+do not reuse any binary from the H200 bundle:
+
+```bash
+make -C "$DS4_DIR" \
+  tests/test_motif3_loader tests/test_motif3_reference \
+  tests/test_motif3_tokenizer tests/test_motif3_cuda \
+  tests/test_motif3_resident tests/test_motif3_long \
+  CUDA_ARCH=sm_121
+
+"$DS4_DIR/tests/test_motif3_loader" "$MERGED_MODEL"
+"$DS4_DIR/tests/test_motif3_reference" \
+  "$HANDOFF_DIR/fixtures/official-final"
+"$DS4_DIR/tests/test_motif3_tokenizer" "$MERGED_MODEL" \
+  "$HANDOFF_DIR/fixtures/official-final/tokenizer-chat.ds4tok"
+"$DS4_DIR/tests/test_motif3_cuda" \
+  "$HANDOFF_DIR/fixtures/official-final"
+"$DS4_DIR/tests/test_motif3_resident" "$MERGED_MODEL"
+
+for TOKENS in 32768 65536 131072 262144; do
+  "$DS4_DIR/tests/test_motif3_long" "$MERGED_MODEL" \
+    "$HANDOFF_DIR/fixtures/long-context/context-${TOKENS}.tokens.npy"
+done
+```
+
+For the release server, deliberately omit both `--ssd-streaming` and
+`--kv-disk-dir`:
+
+```bash
+CUDA_VISIBLE_DEVICES=0 "$DS4_DIR/ds4-server" \
+  --cuda --model "$MERGED_MODEL" --ctx 262144 \
+  --prefill-chunk 256 --batched-session 1 --tokens 64 \
+  --host 127.0.0.1 --port 8000
+```
 
 ## What the H200 stage established
 
