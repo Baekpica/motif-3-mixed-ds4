@@ -27,7 +27,7 @@ explicit in `DGX-SPARK-HANDOFF.md`.
 | Public reproduction and runtime | `Baekpica/motif-3-mixed-ds4` and the pinned public ds4 branch above | Passed |
 | Offline ds4 patch reproducibility | Binary patch from pinned main base `b030961…` to Motif head `d878ea1…` passes `git apply --check` in a clean detached base checkout | Passed |
 | Artifact placement separation | The two GGUF repositories are public HF models, reproduction is the public GitHub repository, expensive state is the private bucket, and `Baekpica/motif-3-mixed-ds4` is absent from HF model repositories | Passed |
-| Private Spark handoff | `hf://buckets/Baekpica/motif-3-spark-handoff`, checksum manifest, exact calibration/imatrix partials, fixtures, sources, commands, and immutable model references | PENDING_FINAL_SYNC |
+| Private Spark handoff | `hf://buckets/Baekpica/motif-3-spark-handoff`, checksum manifest, exact calibration/imatrix partials, fixtures, sources, commands, and immutable model references | Passed — bucket privacy, the 145-file manifest, a fresh full-bucket download, and every SHA-256 were verified; no public GGUF shard is duplicated. |
 | MQ95/MQ97 excluded | No MQ95/MQ97 artifact or precision promotion is published | Passed |
 
 NVIDIA Nsight Systems and Compute are absent from the Runpod image. No
